@@ -1,3 +1,10 @@
+--- 
+layout: post
+title: 2018-09-29: MTA Data project
+date: 2018-09-29
+---
+
+
 ### Background
 Week 1 of the Metis Data Science Bootcamp is in the books! Our first project was a group one, in which we were tasked with mining NYC MTA Turnstile data to recommend optimal deployment of a Tech organization's volunteers. The organization wished to maximize mailing list sign-ups, promote their upcoming gala, and solicit potential donors. We were free to use other datasets.
 
