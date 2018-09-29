@@ -1,4 +1,8 @@
-
+---
+layout: post
+title: 2018-09-29-challenge-01.md
+data: 2018-09-29
+---
 
 ```python
 import pandas as pd
