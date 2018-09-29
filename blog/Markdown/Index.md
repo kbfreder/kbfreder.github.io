@@ -1,5 +1,5 @@
 
-# Jupyter Site
+# Adventures in Data Science
 
 JupyterSite allows you to easily build a suite of rendered documents from Jupyter
 notebooks. Jupyter notebooks go in, html/markdown pages, PDFs, slideshows, and tex
@@ -88,7 +88,7 @@ This repository is also setup as a Julia package repository. To have users easil
 open up the Jupyter notebooks, they can use the commands from within Julia:
 
 
-```julia
+```python
 Pkg.add("IJulia") # use once to install IJulia
 Pkg.clone("https://github.com/ChrisRackauckas/JupyterSite") # Change this to your Github repo
 using IJulia
@@ -106,7 +106,7 @@ to include notebook files into Julia. Use this to add tests to the test/runtests
 file. To run the tests locally, use the commands
 
 
-```julia
+```python
 Pkg.test("JupyterSite")
 ```
 

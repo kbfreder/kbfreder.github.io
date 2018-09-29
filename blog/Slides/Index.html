@@ -13242,7 +13242,7 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Jupyter-Site">Jupyter Site<a class="anchor-link" href="#Jupyter-Site">&#182;</a></h1>
+<h1 id="Adventures-in-Data-Science">Adventures in Data Science<a class="anchor-link" href="#Adventures-in-Data-Science">&#182;</a></h1>
 </div>
 </div>
 </div><div class="fragment">
@@ -13350,10 +13350,10 @@ open up the Jupyter notebooks, they can use the commands from within Julia:</p>
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-julia"><pre><span></span><span class="n">Pkg</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&quot;IJulia&quot;</span><span class="p">)</span> <span class="c"># use once to install IJulia</span>
-<span class="n">Pkg</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="s">&quot;https://github.com/ChrisRackauckas/JupyterSite&quot;</span><span class="p">)</span> <span class="c"># Change this to your Github repo</span>
-<span class="k">using</span> <span class="n">IJulia</span>
-<span class="n">notebook</span><span class="p">(</span><span class="n">dir</span><span class="o">=</span><span class="n">Pkg</span><span class="o">.</span><span class="n">dir</span><span class="p">(</span><span class="s">&quot;JupyterSite&quot;</span><span class="p">)</span><span class="o">*</span><span class="s">&quot;/Notebooks&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Pkg</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;IJulia&quot;</span><span class="p">)</span> <span class="c1"># use once to install IJulia</span>
+<span class="n">Pkg</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="s2">&quot;https://github.com/ChrisRackauckas/JupyterSite&quot;</span><span class="p">)</span> <span class="c1"># Change this to your Github repo</span>
+<span class="n">using</span> <span class="n">IJulia</span>
+<span class="n">notebook</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">Pkg</span><span class="o">.</span><span class="n">dir</span><span class="p">(</span><span class="s2">&quot;JupyterSite&quot;</span><span class="p">)</span><span class="o">*</span><span class="s2">&quot;/Notebooks&quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13386,7 +13386,7 @@ file. To run the tests locally, use the commands</p>
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-julia"><pre><span></span><span class="n">Pkg</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s">&quot;JupyterSite&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Pkg</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="s2">&quot;JupyterSite&quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
