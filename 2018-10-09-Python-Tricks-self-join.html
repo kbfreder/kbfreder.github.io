@@ -10,35 +10,36 @@
         <meta property="og:type" content="article" />
         <meta name="twitter:card" content="summary">
 
-<meta name="keywords" content="Metis python, posts, " />
+<meta name="keywords" content="python tricks pandas, posts, " />
 
-<meta property="og:title" content="NYC MTA Turnstile Data "/>
-<meta property="og:url" content="https://kbfreder.github.io/2018-09-29-MTA.html" />
-<meta property="og:description" content="Project Luther: EDA of NYC Subway turnstile data" />
+<meta property="og:title" content="Panda Tricks: Self-Joins "/>
+<meta property="og:url" content="http://kbfreder.github.io/2018-10-09-Python-Tricks-self-join.html" />
+<meta property="og:description" content="Self-join to extract information from two columns" />
 <meta property="og:site_name" content="Kendra Frederick - Data Science blog" />
 <meta property="og:article:author" content="Kendra Frederick" />
-<meta property="og:article:published_time" content="2018-09-29T00:00:00-07:00" />
-<meta name="twitter:title" content="NYC MTA Turnstile Data ">
-<meta name="twitter:description" content="Project Luther: EDA of NYC Subway turnstile data">
+<meta property="og:article:published_time" content="2018-10-09T00:00:00-07:00" />
+<meta name="twitter:title" content="Panda Tricks: Self-Joins ">
+<meta name="twitter:description" content="Self-join to extract information from two columns">
 
-        <title>NYC MTA Turnstile Data  · Kendra Frederick - Data Science blog
+        <title>Panda Tricks: Self-Joins  · Kendra Frederick - Data Science blog
 </title>
         <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="https://kbfreder.github.io/theme/css/pygments.css" media="screen">
-        <link rel="stylesheet" type="text/css" href="https://kbfreder.github.io/theme/tipuesearch/tipuesearch.css" media="screen">
-        <link rel="stylesheet" type="text/css" href="https://kbfreder.github.io/theme/css/elegant.css" media="screen">
-        <link rel="stylesheet" type="text/css" href="https://kbfreder.github.io/theme/css/custom.css" media="screen">
-        <link rel="shortcut icon" href="https://kbfreder.github.io/images/favicon.ico" type="image/x-icon" type="image/png" />
-        <link rel="icon" href="https://kbfreder.github.io/theme/images/apple-touch-icon-152x152.png" type="image/png" />
-        <link rel="apple-touch-icon" href="https://kbfreder.github.io/theme/images/apple-touch-icon.png"  type="image/png" />
-        <link rel="apple-touch-icon" sizes="57x57" href="https://kbfreder.github.io/theme/images/apple-touch-icon-57x57.png" type="image/png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="https://kbfreder.github.io/theme/images/apple-touch-icon-72x72.png" type="image/png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="https://kbfreder.github.io/theme/images/apple-touch-icon-76x76.png" type="image/png" />
-        <link rel="apple-touch-icon" sizes="114x114" href="https://kbfreder.github.io/theme/images/apple-touch-icon-114x114.png" type="image/png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="https://kbfreder.github.io/theme/images/apple-touch-icon-120x120.png" type="image/png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="https://kbfreder.github.io/theme/images/apple-touch-icon-144x144.png" type="image/png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="https://kbfreder.github.io/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="stylesheet" type="text/css" href="http://kbfreder.github.io/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://kbfreder.github.io/theme/tipuesearch/tipuesearch.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://kbfreder.github.io/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="http://kbfreder.github.io/theme/css/custom.css" media="screen">
+        <link rel="shortcut icon" href="http://kbfreder.github.io/images/favicon.ico" type="image/x-icon" type="image/png" />
+        <link rel="icon" href="http://kbfreder.github.io/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link rel="apple-touch-icon" href="http://kbfreder.github.io/theme/images/apple-touch-icon.png"  type="image/png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="http://kbfreder.github.io/theme/images/apple-touch-icon-57x57.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="http://kbfreder.github.io/theme/images/apple-touch-icon-72x72.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="http://kbfreder.github.io/theme/images/apple-touch-icon-76x76.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="http://kbfreder.github.io/theme/images/apple-touch-icon-114x114.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="http://kbfreder.github.io/theme/images/apple-touch-icon-120x120.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="http://kbfreder.github.io/theme/images/apple-touch-icon-144x144.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="http://kbfreder.github.io/theme/images/apple-touch-icon-152x152.png" type="image/png" />
+        <link href="http://kbfreder.github.io/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Kendra Frederick - Data Science blog - Full Atom Feed" />
     </head>
     <body>
         <div id="content-sans-footer">
@@ -50,14 +51,14 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="https://kbfreder.github.io/"><span class=site-name>Kendra Frederick - Data Science blog</span></a>
+                    <a class="brand" href="http://kbfreder.github.io/"><span class=site-name>Kendra Frederick - Data Science blog</span></a>
                     <div class="nav-collapse collapse">
                         <ul class="nav pull-right top-menu">
-                            <li ><a href="https://kbfreder.github.io">Home</a></li>
-                            <li ><a href="https://kbfreder.github.io/categories.html">Categories</a></li>
-                            <li ><a href="https://kbfreder.github.io/tags.html">Tags</a></li>
-                            <li ><a href="https://kbfreder.github.io/archives.html">Archives</a></li>
-                            <li><form class="navbar-search" action="https://kbfreder.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                            <li ><a href="http://kbfreder.github.io">Home</a></li>
+                            <li ><a href="http://kbfreder.github.io/categories.html">Categories</a></li>
+                            <li ><a href="http://kbfreder.github.io/tags.html">Tags</a></li>
+                            <li ><a href="http://kbfreder.github.io/archives.html">Archives</a></li>
+                            <li><form class="navbar-search" action="http://kbfreder.github.io/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
                         </ul>
                     </div>
                 </div>
@@ -70,7 +71,7 @@
 <article>
 <div class="row-fluid">
     <header class="page-header span10 offset2">
-    <h1><a href="https://kbfreder.github.io/2018-09-29-MTA.html"> NYC MTA Turnstile Data  </a></h1>
+    <h1><a href="http://kbfreder.github.io/2018-10-09-Python-Tricks-self-join.html"> Panda Tricks: Self-Joins  </a></h1>
     </header>
 </div>
 
@@ -1230,66 +1231,66 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Project-1:-MTA-Turnstile-Data">Project 1: MTA Turnstile Data<a class="anchor-link" href="#Project-1:-MTA-Turnstile-Data">&#182;</a></h1>
+<h2 id="Self-Join-to-extract-information-in-two-columns">Self-Join to extract information in two columns<a class="anchor-link" href="#Self-Join-to-extract-information-in-two-columns">&#182;</a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Background">Background<a class="anchor-link" href="#Background">&#182;</a></h2><p>Week 1 of the Metis Data Science Bootcamp is in the books! Our first project was a group one, in which we were tasked with mining NYC MTA Turnstile data to recommend optimal deployment of a Tech organization's volunteers. The organization wished to acquire mailing list sign-ups, promote their upcoming gala, and solicit potential donors. We were free to use other datasets.</p>
-<h3 id="Team-Members">Team Members<a class="anchor-link" href="#Team-Members">&#182;</a></h3><p>I need to start off by recognizing my team: Brenner Heintz, Hiranya Kumar, and Luke Tibbott. Our collective ideas, feedback, and efforts made a better final product than I would have been able to produce on my own. It was a pleasure to work with them.</p>
-<h3 id="Data">Data<a class="anchor-link" href="#Data">&#182;</a></h3><ul>
-<li><a href="http://web.mta.info/developers/turnstile.html">MTA Turnstile Data</a></li>
-<li>Census data</li>
-</ul>
-<h3 id="Tools:">Tools:<a class="anchor-link" href="#Tools:">&#182;</a></h3><ul>
-<li>Python, Pandas, Matplotlib, Seaborn</li>
-<li>Google API</li>
-</ul>
-<h3 id="Approach">Approach<a class="anchor-link" href="#Approach">&#182;</a></h3><p>Select top stations based on:</p>
-<ul>
-<li>Traffic volume: a high-volume station means interacting with more people</li>
-<li>Commuter "fingerprint": tourists are less likely to attend the Gala (and donate) than native New Yorkers.</li>
-<li>Proximity to high-income residents: people with more disposable income are more likely to donate. </li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Data-Cleaning">Data Cleaning<a class="anchor-link" href="#Data-Cleaning">&#182;</a></h2><h3 id="MTA-Data">MTA Data<a class="anchor-link" href="#MTA-Data">&#182;</a></h3><p>We started off by downloading one dataset from the MTA website and importing it into python using a csv reader. A scan of the dataframe revealed an issue with the naming of the 'EXITS' column (it contained extra whitespace -- easily removed with <code>str.strip()</code>. This may seem like a small detail, but I mention it because <strong>review of imported data is an essential part of data munging</strong>.</p>
-<p>The entry and exit data are given as a series of counter values every 4 hours, <em>usually</em> (but not always...see below) at 0:00, 4:00, 8:00, etc. Thus, to get the actual number of entries and exits, we needed to calculate the difference between consecutive rows for a given station's turnstile:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-
-<pre><code>df['ENTRY_DIFFS'] = df.groupby(['STATION_KEY','TURNSTILE'])['ENTRIES'].diff(periods=-1)*-1</code></pre>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Anytime you apply a function</strong> to a dataframe, it's a good idea to <strong>check that it performed as intended</strong>. Reviewing the basic stats of the resulting 'ENTRY_DIFFS' column (or examining a distribution of the values) revealed some very large and some negative values. Examining the large-magnitude differences revealed that they appeared to be due to a resetting of the counter:</p>
+<h3 id="The-problem:"><em>The problem:</em><a class="anchor-link" href="#The-problem:">&#182;</a></h3><p>In timeseries data, information for an entity (here, a team) is sometimes in one column, sometimes in another. We want to compute the difference in the entity's value from one timepoint to the next. But this is not straightforward.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rand_idx</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;ENTRY_DIFFS&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">2E5</span><span class="p">)][:</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">rand_idx</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span><span class="n">rand_idx</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;STATION_KEY&#39;</span><span class="p">,</span> <span class="s1">&#39;DATETIME&#39;</span><span class="p">,</span><span class="s1">&#39;ENTRIES&#39;</span><span class="p">,</span><span class="s1">&#39;ENTRY_DIFFS&#39;</span><span class="p">]]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Our dataset is FiveThirtyEight's NFL Elo Rankings. Note, I have cropped this dataset to seasons 2007 &amp; after.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">elo_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;Data/nfl_games.csv&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here is what our dataframe looks like:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">elo_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -1302,7 +1303,7 @@ h6:hover .anchor-link {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[8]:</div>
+    <div class="prompt output_prompt">Out[4]:</div>
 
 
 
@@ -1325,47 +1326,95 @@ h6:hover .anchor-link {
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>STATION_KEY</th>
-      <th>DATETIME</th>
-      <th>ENTRIES</th>
-      <th>ENTRY_DIFFS</th>
+      <th>date</th>
+      <th>season</th>
+      <th>neutral</th>
+      <th>playoff</th>
+      <th>team1</th>
+      <th>team2</th>
+      <th>elo1</th>
+      <th>elo2</th>
+      <th>elo_prob1</th>
+      <th>score1</th>
+      <th>score2</th>
+      <th>result1</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>15399</th>
-      <td>B020 R263 AVENUE H</td>
-      <td>2018-05-23 04:00:00</td>
-      <td>92835</td>
-      <td>9.0</td>
-    </tr>
-    <tr>
-      <th>15400</th>
-      <td>B020 R263 AVENUE H</td>
-      <td>2018-05-23 08:00:00</td>
-      <td>92844</td>
-      <td>18.0</td>
-    </tr>
-    <tr>
-      <th>15401</th>
-      <td>B020 R263 AVENUE H</td>
-      <td>2018-05-23 12:00:00</td>
-      <td>92862</td>
-      <td>523768.0</td>
-    </tr>
-    <tr>
-      <th>15402</th>
-      <td>B020 R263 AVENUE H</td>
-      <td>2018-05-23 16:00:00</td>
-      <td>616630</td>
-      <td>8.0</td>
-    </tr>
-    <tr>
-      <th>15403</th>
-      <td>B020 R263 AVENUE H</td>
-      <td>2018-05-23 20:00:00</td>
-      <td>616638</td>
+      <th>0</th>
+      <td>2007-09-06</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>IND</td>
+      <td>NO</td>
+      <td>1653.923</td>
+      <td>1515.973</td>
+      <td>0.762833</td>
+      <td>41</td>
+      <td>10</td>
       <td>1.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2007-09-09</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>WSH</td>
+      <td>MIA</td>
+      <td>1448.841</td>
+      <td>1489.941</td>
+      <td>0.534341</td>
+      <td>16</td>
+      <td>13</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2007-09-09</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>BUF</td>
+      <td>DEN</td>
+      <td>1516.684</td>
+      <td>1558.574</td>
+      <td>0.533209</td>
+      <td>14</td>
+      <td>15</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2007-09-09</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>SEA</td>
+      <td>TB</td>
+      <td>1511.936</td>
+      <td>1417.385</td>
+      <td>0.714726</td>
+      <td>20</td>
+      <td>6</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2007-09-09</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>CLE</td>
+      <td>PIT</td>
+      <td>1396.563</td>
+      <td>1568.569</td>
+      <td>0.350697</td>
+      <td>7</td>
+      <td>34</td>
+      <td>0.0</td>
     </tr>
   </tbody>
 </table>
@@ -1381,103 +1430,582 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We chose to filter these outliers out of our dataset. One of our instructors later mentioned that some turnstile's counters appeared to be counting down instead of up -- so one could simply invert their negative numbers and obtain reasonable data. <strong>There are always choices like this to be made in cleaning data.</strong></p>
+<p>The entries are by game. We want to calculate the change in a team's Elo ranking score from one week to the next. We will ultimately want to execute a 'shift' to get the before- and after-Elo scores in the same row. But first, we must address the fact that sometimes a team is 'team1' and other times it is 'team2':</p>
 
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">elo_df</span><span class="p">[(</span><span class="n">elo_df</span><span class="p">[</span><span class="s1">&#39;team1&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;NO&#39;</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">elo_df</span><span class="p">[</span><span class="s1">&#39;team2&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;NO&#39;</span><span class="p">)][[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span><span class="s1">&#39;team1&#39;</span><span class="p">,</span><span class="s1">&#39;team2&#39;</span><span class="p">,</span><span class="s1">&#39;elo1&#39;</span><span class="p">,</span><span class="s1">&#39;elo2&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[5]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>team1</th>
+      <th>team2</th>
+      <th>elo1</th>
+      <th>elo2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2007-09-06</td>
+      <td>IND</td>
+      <td>NO</td>
+      <td>1653.923</td>
+      <td>1515.973</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>2007-09-16</td>
+      <td>TB</td>
+      <td>NO</td>
+      <td>1402.979</td>
+      <td>1500.922</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>2007-09-24</td>
+      <td>NO</td>
+      <td>TEN</td>
+      <td>1468.805</td>
+      <td>1506.098</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>2007-10-07</td>
+      <td>NO</td>
+      <td>CAR</td>
+      <td>1437.203</td>
+      <td>1484.207</td>
+    </tr>
+    <tr>
+      <th>85</th>
+      <td>2007-10-14</td>
+      <td>SEA</td>
+      <td>NO</td>
+      <td>1531.254</td>
+      <td>1422.503</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Census-data">Census data<a class="anchor-link" href="#Census-data">&#182;</a></h3><p>We downloaded income tax data from the U.S. 2016 Census and counted the number "high income" residents by zip code. We defined "high income" as earning &gt;$100,000 per year.</p>
+<p>To remedy this, we'll effectively perform two "self-joins" of the table. One on team1 and its Elo score and game score, and one on team2</p>
 
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">elo_append_cols_h</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span><span class="s1">&#39;season&#39;</span><span class="p">,</span><span class="s1">&#39;neutral&#39;</span><span class="p">,</span><span class="s1">&#39;playoff&#39;</span><span class="p">,</span><span class="s1">&#39;team1&#39;</span><span class="p">,</span><span class="s1">&#39;elo1&#39;</span><span class="p">,</span><span class="s1">&#39;score1&#39;</span><span class="p">]</span>
+<span class="n">elo_append_cols_a</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span><span class="s1">&#39;season&#39;</span><span class="p">,</span><span class="s1">&#39;neutral&#39;</span><span class="p">,</span><span class="s1">&#39;playoff&#39;</span><span class="p">,</span><span class="s1">&#39;team2&#39;</span><span class="p">,</span><span class="s1">&#39;elo2&#39;</span><span class="p">,</span><span class="s1">&#39;score2&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">elo_df_h</span> <span class="o">=</span> <span class="n">elo_df</span><span class="p">[</span><span class="n">elo_append_cols_h</span><span class="p">]</span>
+<span class="n">elo_df_a</span> <span class="o">=</span> <span class="n">elo_df</span><span class="p">[</span><span class="n">elo_append_cols_a</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">elo_df_h</span> <span class="o">=</span> <span class="n">elo_df_h</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;elo1&#39;</span><span class="p">:</span><span class="s1">&#39;elo&#39;</span><span class="p">,</span> <span class="s1">&#39;team1&#39;</span><span class="p">:</span><span class="s1">&#39;team&#39;</span><span class="p">,</span><span class="s1">&#39;score1&#39;</span><span class="p">:</span><span class="s1">&#39;score&#39;</span><span class="p">})</span>
+<span class="n">elo_df_a</span> <span class="o">=</span> <span class="n">elo_df_a</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;elo2&#39;</span><span class="p">:</span><span class="s1">&#39;elo&#39;</span><span class="p">,</span> <span class="s1">&#39;team2&#39;</span><span class="p">:</span><span class="s1">&#39;team&#39;</span><span class="p">,</span><span class="s1">&#39;score2&#39;</span><span class="p">:</span><span class="s1">&#39;score&#39;</span><span class="p">})</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Addresses-for-stations">Addresses for stations<a class="anchor-link" href="#Addresses-for-stations">&#182;</a></h3><p>We used the GoogleMaps API to get the geocodes of (most) subways stations. We extracted the zip code from the address and merged it with the high-income residents dataframe.</p>
+<p>Here is what one half of the self-joined dataframes looks like. It contains only the data for team 1. The other dataframe, as you can guess, contains only the data for team2.</p>
 
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">elo_df_h</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[9]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>season</th>
+      <th>neutral</th>
+      <th>playoff</th>
+      <th>team</th>
+      <th>elo</th>
+      <th>score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2007-09-06</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>IND</td>
+      <td>1653.923</td>
+      <td>41</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2007-09-09</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>WSH</td>
+      <td>1448.841</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2007-09-09</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>BUF</td>
+      <td>1516.684</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2007-09-09</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>SEA</td>
+      <td>1511.936</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2007-09-09</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>CLE</td>
+      <td>1396.563</td>
+      <td>7</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h2><p>We explored different ways of grouping, slicing, and performing statistical analyses on the MTA turnstile data. We ultimately calculated the <strong>daily total median volume</strong> (entries + exits) for each station and used this to score stations for traffic. We chose median, rather than mean or total volume, as we felt this would provide an additional protection against outliers in the data skewing our results.</p>
-<p>We explored a variety of ways to classify or score stations as commuter vs. tourist. We ultimately chose a <strong>weekday:weekend ratio</strong>, calculated using the total daily median for each station. We had to filter out stations that had anomalously low weekend traffic, likely due to station closings for track work.</p>
-<p>We examined the distribution of the number of high income residents to establish a cut-off value.</p>
+<p>We append one df to the other, sort by date, and then apply a shift:</p>
 
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">elo_df_flat</span> <span class="o">=</span> <span class="n">elo_df_h</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">elo_df_a</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">elo_df_flat</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">elo_df_flat</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">elo_df_flat</span><span class="p">[</span><span class="s1">&#39;elo_after&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elo_df_flat</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;team&#39;</span><span class="p">)[</span><span class="s1">&#39;elo&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">elo_df_flat</span><span class="p">[</span><span class="s1">&#39;elo_delta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">elo_df_flat</span><span class="p">[</span><span class="s1">&#39;elo_after&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">elo_df_flat</span><span class="p">[</span><span class="s1">&#39;elo&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Traffic-+-Income-+-Commuters">Traffic + Income + Commuters<a class="anchor-link" href="#Traffic-+-Income-+-Commuters">&#182;</a></h3><p>Plotting the number of high-income residents proximal to a station vs. median daily traffic at that station, and applying cut-off criteria:</p>
-<ul>
-<li>Traffic: total daily median volume &gt; 50,000</li>
-<li>Income: number of high-income residents in the same zipcode as the station &gt; 8,000</li>
-<li>Commuters: high weekday:weekend median daily traffic ratio &gt; 2.0</li>
-</ul>
+<p>Recall from our glimpses above that IND played NO in the first game. Their elo_delta's should sum to 0, and they do:</p>
 
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">elo_df_flat</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[13]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>season</th>
+      <th>neutral</th>
+      <th>playoff</th>
+      <th>team</th>
+      <th>elo</th>
+      <th>score</th>
+      <th>elo_after</th>
+      <th>elo_delta</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2007-09-06</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>IND</td>
+      <td>1653.923</td>
+      <td>41</td>
+      <td>1668.974</td>
+      <td>15.051</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2007-09-06</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>NO</td>
+      <td>1515.973</td>
+      <td>10</td>
+      <td>1500.922</td>
+      <td>-15.051</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/conclusion-fig.png" alt="HIRTrafficCommuter" width="700" align="center"/></p>
+<p>Now, we merge back with the original dataframe on date &amp; team = team1, merging only 'elo_delta'.</p>
 
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We arrived at 5 stations that meet these criteria.</p>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">elo_df_flat_for_merge</span> <span class="o">=</span> <span class="n">elo_df_flat</span><span class="p">[[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span><span class="s1">&#39;team&#39;</span><span class="p">,</span><span class="s1">&#39;elo_delta&#39;</span><span class="p">]]</span>
+
+<span class="n">elo_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">elo_df</span><span class="p">,</span> <span class="n">elo_df_flat_for_merge</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span><span class="s1">&#39;team1&#39;</span><span class="p">],</span> <span class="n">right_on</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">,</span><span class="s1">&#39;team&#39;</span><span class="p">])</span>
+
+<span class="n">elo_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s1">&#39;team&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">elo_df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;elo_delta&#39;</span><span class="p">:</span><span class="s1">&#39;elo_delta1&#39;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">elo_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[15]:</div>
+
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>season</th>
+      <th>neutral</th>
+      <th>playoff</th>
+      <th>team1</th>
+      <th>team2</th>
+      <th>elo1</th>
+      <th>elo2</th>
+      <th>elo_prob1</th>
+      <th>score1</th>
+      <th>score2</th>
+      <th>result1</th>
+      <th>elo_delta1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2007-09-06</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>IND</td>
+      <td>NO</td>
+      <td>1653.923</td>
+      <td>1515.973</td>
+      <td>0.762833</td>
+      <td>41</td>
+      <td>10</td>
+      <td>1.0</td>
+      <td>15.051</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2007-09-09</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>WSH</td>
+      <td>MIA</td>
+      <td>1448.841</td>
+      <td>1489.941</td>
+      <td>0.534341</td>
+      <td>16</td>
+      <td>13</td>
+      <td>1.0</td>
+      <td>12.772</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2007-09-09</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>BUF</td>
+      <td>DEN</td>
+      <td>1516.684</td>
+      <td>1558.574</td>
+      <td>0.533209</td>
+      <td>14</td>
+      <td>15</td>
+      <td>0.0</td>
+      <td>-7.471</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>2007-09-09</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>SEA</td>
+      <td>TB</td>
+      <td>1511.936</td>
+      <td>1417.385</td>
+      <td>0.714726</td>
+      <td>20</td>
+      <td>6</td>
+      <td>1.0</td>
+      <td>14.406</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2007-09-09</td>
+      <td>2007</td>
+      <td>0</td>
+      <td>0</td>
+      <td>CLE</td>
+      <td>PIT</td>
+      <td>1396.563</td>
+      <td>1568.569</td>
+      <td>0.350697</td>
+      <td>7</td>
+      <td>34</td>
+      <td>0.0</td>
+      <td>-22.287</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Conclusions">Conclusions<a class="anchor-link" href="#Conclusions">&#182;</a></h2><p>We recommended the organization target these 5 subways stations in their soliciation efforts:</p>
 
 </div>
-</div>
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/final-station-map.png" alt="StationMap" width="600" align="center"/></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We could further recommend the time of day to visit these staions. The heatmaps below show total meidan traffic by time of day and day of week.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/heatmap.png" alt="Heatmap" width="900"/></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The best time of day to visit stations is Tues-Thurs during the evening rush hour (16h-20h).</p>
-<p>The 5 AV/53 ST station's heatmap appears different because its time data is shifted. This is an artifact of how the data were resampled. Most station data were reported in 4-hour time blocks starting at midnight (0h). However, not every station's data were reported in exact 4-hour increments, or at the same times (e.g. started at 2AM). We clearly did not do a good enough job of checking this data manipulation! It could be remedied by unsampling the data into 1-hour time blocks, then re-sampling into 4-hour blocks.</p>
+<p>Voila! $\Delta$Elo's for a given game, computed from the next week's Elo Ranking for the teams involved.</p>
 
 </div>
 </div>
@@ -1521,13 +2049,13 @@ h6:hover .anchor-link {
         <section>
         <div class="span2" style="float:right;font-size:0.9em;">
             <h4>Published</h4>
-            <time pubdate="pubdate" datetime="2018-09-29T00:00:00-07:00">Sep 29, 2018</time>
+            <time pubdate="pubdate" datetime="2018-10-09T00:00:00-07:00">Oct 9, 2018</time>
             <h4>Category</h4>
-            <a class="category-link" href="https://kbfreder.github.io/categories.html#posts-ref">posts</a>
+            <a class="category-link" href="http://kbfreder.github.io/categories.html#posts-ref">posts</a>
             <h4>Tags</h4>
             <ul class="list-of-tags tags-in-article">
-                <li><a href="https://kbfreder.github.io/tags.html#metis-python-ref">Metis python
-                    <span>1</span>
+                <li><a href="http://kbfreder.github.io/tags.html#python-tricks-pandas-ref">python tricks pandas
+                    <span>2</span>
 </a></li>
             </ul>
 <h4>Contact</h4>
