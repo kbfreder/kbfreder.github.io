@@ -1,0 +1,31 @@
+<!-- 5. Make a triangle with yellow fill and a blue border. -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3 Test</title>
+        <script type="text/javascript" src="d3/d3.v4.js"></script>
+        <!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
+    </head>
+    <body>
+        <script type="text/javascript">
+          var w = 500;
+          var h = 500;
+
+          var svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
+          // var bkgd = svg.append("rect").attr("width", w).attr("height", h).attr("fill", "grey")
+
+          svg.append("polygon")
+            .attr("class", "shape")
+            .attr("points", "100,50 175,225 35,100")
+            .attr("fill", "yellow")
+            .attr("stroke", "blue")
+            .attr("stroke-width", 2)
+            ;
+
+
+        </script>
+
+    </body>
+</html>
