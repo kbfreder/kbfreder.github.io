@@ -3,7 +3,7 @@ from kf_api import prediction
 
 app = Flask('BreastCancerSurvivial')
 
-@app.route('/survival', methods=['POST'])
+@app.route('/survival', methods=['GET','POST'])
 def get_prediction():
     # alert("Page loaded")
     print("Page loaded")
