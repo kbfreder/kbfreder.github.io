@@ -134,8 +134,8 @@
     $.ajax({
       type: "POST",
       contentType: "application/json; charset=utf-8",
-      // url: "/survival",  // Replace with URL of POST handler
-      url: url_for("survival"),
+      url: "kf_app.py/survival",  // Replace with URL of POST handler
+      // url: url_for("survival"),
       dataType: "json",
       async: true,
       data: JSON.stringify(inputs),
