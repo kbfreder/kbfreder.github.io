@@ -33,7 +33,7 @@
 
 <meta name="author" content="Kendra Frederick" />
 <meta name="description" content="Exploring Rap &amp; Country music lyrics" />
-<meta name="keywords" content="Metis, NLP, LDA, unsupervised learning">
+<meta name="keywords" content="Metis python">
 
 <meta property="og:site_name" content="Data Science: A Scenic Date"/>
 <meta property="og:title" content="Gangsta Score"/>
@@ -45,10 +45,7 @@
 <meta property="article:modified_time" content=""/>
 <meta property="article:author" content="https://kbfreder.github.io/author/kendra-frederick.html">
 <meta property="article:section" content="projects"/>
-<meta property="article:tag" content="Metis"/>
-<meta property="article:tag" content="NLP"/>
-<meta property="article:tag" content="LDA"/>
-<meta property="article:tag" content="unsupervised learning"/>
+<meta property="article:tag" content="Metis python"/>
 <meta property="og:image" content="https://kbfreder.github.io/images/profile.png">
 
   <title>Data Science: A Scenic Date &ndash; Gangsta Score</title>
@@ -1256,7 +1253,14 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Exploring-Rap-&amp;-Country-Music-Lyrics">Exploring Rap &amp; Country Music Lyrics<a class="anchor-link" href="#Exploring-Rap-&amp;-Country-Music-Lyrics">&#182;</a></h2>
+<h1 id="The-&quot;Gangsta-Score&quot;:-Exploring-Rap-&amp;-Country-Music-Lyrics">The "Gangsta Score": Exploring Rap &amp; Country Music Lyrics<a class="anchor-link" href="#The-&quot;Gangsta-Score&quot;:-Exploring-Rap-&amp;-Country-Music-Lyrics">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Metis-Project-4-(&quot;Fletcher&quot;):-NLP-and-Unsupervised-Learning"><em>Metis Project 4 ("Fletcher"): NLP and Unsupervised Learning</em><a class="anchor-link" href="#Metis-Project-4-(&quot;Fletcher&quot;):-NLP-and-Unsupervised-Learning">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -1270,7 +1274,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>For the fourth project ("Project Fletcher") of Metis' Data Science bootcamp, which tasked us with using NLP and unsupervised learning, I chose to explore the language-space of two music genres that seem diametrically opposed: Rap and Country. Can we identify features that distinguish or define them? Also, given the seemingly unbreachable cultural chasm between the audiences that listen to these music genres, any similarities we find between them could serve as a common ground.</p>
+<p>I was interesting in exploring the language-space of two music genres -- Rap and Country -- that seem diametrically opposed. Can we identify features that distinguish or define them? Also, given the seemingly unbreachable cultural chasm between the audiences that listen to these music genres, any similarities we find between them could serve as a common ground.</p>
 
 </div>
 </div>
@@ -1311,7 +1315,7 @@ h6:hover .anchor-link {
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Topic-Modeling-with-LDA">Topic Modeling with LDA<a class="anchor-link" href="#Topic-Modeling-with-LDA">&#182;</a></h4><p>In NLP, Topic Modeling is a statistical method for discovering the collection of topics a corpus of documents contain. Latent Dirichlet Allocation (LDA) is one such topic modeling approach in common use today. In LDA, documents are thought to be generated from mixtures of topics, which themselves have distributions of word probabilities. The topic distributions within a document are sparse Dirichlet prior distributions, which result in the documents covering a small set of topics, and topics containing a small set of words; this aligns with intuition.</p>
 <p><a href="https://github.com/bmabey/pyLDAvis">pyLDAvis</a> is a handy library that enables interactive visualization of topic modeling. Here are the results from my 9-topic modeling of the Rap &amp; Country music song corpus:</p>
-<p><img src="images/topic_modeling.png" alt="LDA Visualization" width="500" align=“center”/></p>
+<p><img src="Images/topic_modeling.png" alt="LDA Visualization" width="500" align=“center”/></p>
 
 </div>
 </div>
@@ -1327,7 +1331,7 @@ h6:hover .anchor-link {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>We can see that there are two "main" topics. Examining the most common words in each of these topics, we see that one topic appears to be "Country" and the other "Rap". (Note that the Rap topic contains several offensive words, which have been edited for propriety.)</p>
-<p><img src="images/topic_words.png" alt="Topic Words" width="200" align=“center”/></p>
+<p><img src="Images/topic_words.png" alt="Topic Words" width="200" align=“center”/></p>
 
 </div>
 </div>
@@ -1336,7 +1340,7 @@ h6:hover .anchor-link {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Given that we appear to have a 'Country' topic and a 'Rap' topic, we would expect Country songs to have a high proportion of Topic 1 and Rap songs to have a high percentage of Topic 2. This is more or less what we observe:</p>
-<p><img src="images/Topic_Importance_by_Genre_split_violin_2.png" alt="Topic Importance by genre" width="500" align="center"/></p>
+<p><img src="Images/Topic_Importance_by_Genre_split_violin_2.png" alt="Topic Importance by genre" width="500" align="center"/></p>
 
 </div>
 </div>
@@ -1360,7 +1364,7 @@ h6:hover .anchor-link {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Building on the observation that the relative importance of these two topics in a song appears to discriminate between the two genres, I engineered a feature I'm calling the “Gangsta Score":</p>
-<p><img src="images/gangsta_score.png" alt="Gangsta Score Equation" width=250 alt="center"/></p>
+<p><img src="Images/gangsta_score.png" alt="Gangsta Score Equation" width=250 alt="center"/></p>
 
 </div>
 </div>
@@ -1369,7 +1373,7 @@ h6:hover .anchor-link {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Thus, a song high in Topic 2 (the “Rap” topic) will have a positive score. If we examine the distribution of scores by genre, we observe that rap songs tend to fall on the positive end of the Gangsta Score scale, while country songs fall on the negative end, as expected:</p>
-<p><img src="images/score_hist_overlay_2cat.png" alt="Histogram" width="450" align="center"/></p>
+<p><img src="Images/score_hist_overlay_2cat.png" alt="Histogram" width="450" align="center"/></p>
 
 </div>
 </div>
@@ -1379,9 +1383,9 @@ h6:hover .anchor-link {
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>However, each genre is multimodal, so there is clearly something more complex going on. There is also significant overlap between the two genres in the area between -3 and 0 on the Gangsta Score scale.  I decided to investigate this further</p>
 <p>As a result of assigning each song a distribution of topic importances, LDA effectively reduces the dimensionality of our sparse matrix from  2700 x 45,000 to 2700 x 9. This enables us to use these vectors to determine similarity between songs and to cluster them. I used K-Means clustering with cosine distance. Surprisingly, over 30% of rap songs were clustered with Country songs:</p>
-<p><img src="images/clusters2.png" alt="Clustering" width="400" align="center"/></p>
+<p><img src="Images/clusters2.png" alt="Clustering" width="400" align="center"/></p>
 <p>If we pull out Rap songs that are clustered with country songs, and re-plot the score distributions, we find that these “country-rap” songs fall in the area of overlap:</p>
-<p><img src="images/score_hist_overlay_3cat.png" alt="Histogram with Country Rap" width="450" align="center"/></p>
+<p><img src="Images/score_hist_overlay_3cat.png" alt="Histogram with Country Rap" width="450" align="center"/></p>
 
 </div>
 </div>
@@ -1463,10 +1467,7 @@ h6:hover .anchor-link {
   </div>
   <div class="tag-cloud">
     <p>
-      <a href="https://kbfreder.github.io/tag/metis.html">Metis</a>
-      <a href="https://kbfreder.github.io/tag/nlp.html">NLP</a>
-      <a href="https://kbfreder.github.io/tag/lda.html">LDA</a>
-      <a href="https://kbfreder.github.io/tag/unsupervised-learning.html">unsupervised learning</a>
+      <a href="https://kbfreder.github.io/tag/metis-python.html">Metis python</a>
     </p>
   </div>
 
