@@ -32,25 +32,27 @@
 <!-- End Google Analytics -->
 
 <meta name="author" content="Kendra Frederick" />
-<meta name="description" content="Predicting 5-year survival in breast cancer patients using machine learning classification methods" />
-<meta name="keywords" content="Metis, classification, flask">
+<meta name="description" content="Predicting FDA approval of small molecule drugs" />
+<meta name="keywords" content="Metis, SQL, CatBoost, drug discovery, classification">
 
 <meta property="og:site_name" content="Data Science: A Scenic Date"/>
-<meta property="og:title" content="Predicting 5-Year Breast Cancer Survival"/>
-<meta property="og:description" content="Predicting 5-year survival in breast cancer patients using machine learning classification methods"/>
+<meta property="og:title" content="First Post"/>
+<meta property="og:description" content="Predicting FDA approval of small molecule drugs"/>
 <meta property="og:locale" content="en_US"/>
-<meta property="og:url" content="https://kbfreder.github.io/2018-10-31-Breast-Cancer.html"/>
+<meta property="og:url" content="https://kbfreder.github.io/2018-12-12-Small-Molecules.html"/>
 <meta property="og:type" content="article"/>
-<meta property="article:published_time" content="2018-10-31 00:00:00-07:00"/>
+<meta property="article:published_time" content="2018-12-12 00:00:00-08:00"/>
 <meta property="article:modified_time" content=""/>
 <meta property="article:author" content="https://kbfreder.github.io/author/kendra-frederick.html">
 <meta property="article:section" content="projects"/>
 <meta property="article:tag" content="Metis"/>
+<meta property="article:tag" content="SQL"/>
+<meta property="article:tag" content="CatBoost"/>
+<meta property="article:tag" content="drug discovery"/>
 <meta property="article:tag" content="classification"/>
-<meta property="article:tag" content="flask"/>
 <meta property="og:image" content="https://kbfreder.github.io/images/profile.png">
 
-  <title>Data Science: A Scenic Date &ndash; Predicting 5-Year Breast Cancer Survival</title>
+  <title>Data Science: A Scenic Date &ndash; First Post</title>
 
 </head>
 <body>
@@ -93,9 +95,9 @@
 <article class="single">
   <header>
       
-    <h1 id="2018-10-31-Breast-Cancer">Predicting 5-Year Breast Cancer Survival</h1>
+    <h1 id="2018-12-12-Small-Molecules">First Post</h1>
     <p>
-          Posted on Wed 31 October 2018 in <a href="https://kbfreder.github.io/category/projects.html">projects</a>
+          Posted on Wed 12 December 2018 in <a href="https://kbfreder.github.io/category/projects.html">projects</a>
 
 
     </p>
@@ -1255,19 +1257,14 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Metis-Project-3-(&quot;McNulty&quot;):-Classification"><em>Metis Project 3 ("McNulty"): Classification</em><a class="anchor-link" href="#Metis-Project-3-(&quot;McNulty&quot;):-Classification">&#182;</a></h2><h3 id="Background">Background<a class="anchor-link" href="#Background">&#182;</a></h3><p>Breast cancer is the most common cancer in the U.S., period -- not just in women. 1 in 8 women will be diagnosed with the disease at some point in her life. While the 5-year survival rate is upwards of 84%, any improvement will translate to thousands of lives saved or improved.</p>
-<p>I set out to predict the 5-year survival of breast cancer patients using data gathered by the National Cancer Institute's  (NCI) Surveillance, Epidemeology, and End Results (SEER) program.</p>
-<h3 id="Data">Data<a class="anchor-link" href="#Data">&#182;</a></h3><p>I needed to request access to the data. Data was provided as a text file, in the format of a 362-character string for each entry:</p>
-<blockquote><p>925000100000001544102 020491958   00022008C50228500385003211        0126                       0501002500001002000198798703098820110033331  0104000205500205505590   0         01             210     260001742C502      1161023 09980132202        134005    260002600040236991033011258                   00761     2            20100033         99     8          0100</p>
-</blockquote>
-<p>An accompanying 'SAS' file enabled decoding of this string. It provided the start position, length, abbreviation, and column name for the features contained within in a data entry. The first three features are shown below as an example:</p>
-
-<pre><code>data in;                                                                              
-  infile seer9 lrecl=362;                                                             
-  input                                                                               
-    @ 1   PUBCSNUM             $char8.  /* Patient ID */                              
-    @ 9   REG                  $char10. /* SEER registry */                           
-    @ 19  MAR_STAT             $char1.  /* Marital status at diagnosis */</code></pre>
+<h2 id="Predicting-FDA-Approval-of-Small-Molecule-Drugs">Predicting FDA Approval of Small Molecule Drugs<a class="anchor-link" href="#Predicting-FDA-Approval-of-Small-Molecule-Drugs">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Background">Background<a class="anchor-link" href="#Background">&#182;</a></h3><p>The drug development process is a high-risk, long-term and expensive endeavor. On average, tens of thousands of drug candidates enter the drug discovery pipeline for every one becomes FDA-approved. In addition to this high attrition, this process takes 10 years and is <a href="https://www.liaison.com/blog/2017/05/02/cost-drug-development/">estimated</a> to cost $1.4 billion. Machine Learning could help reduce the risk, thereby lowering costs and expediting the process.</p>
 
 </div>
 </div>
@@ -1275,107 +1272,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Using this information, I was able to transform the text file into a dataframe:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df3</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="mi">10</span><span class="p">]</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[8]:</div>
-
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>PUBCSNUM</th>
-      <th>REG</th>
-      <th>MAR_STAT</th>
-      <th>RACE1V</th>
-      <th>NHIADE</th>
-      <th>SEX</th>
-      <th>AGE_DX</th>
-      <th>YR_BRTH</th>
-      <th>SEQ_NUM</th>
-      <th>MDXRECMP</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>92500005</td>
-      <td>0000001544</td>
-      <td>2</td>
-      <td>01</td>
-      <td>0</td>
-      <td>2</td>
-      <td>045</td>
-      <td>1962</td>
-      <td>00</td>
-      <td>01</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>92500010</td>
-      <td>0000001544</td>
-      <td>1</td>
-      <td>02</td>
-      <td>0</td>
-      <td>2</td>
-      <td>049</td>
-      <td>1958</td>
-      <td>00</td>
-      <td>02</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>The initial dataset contained over 130 features and nearly 600,000 rows. I culled the features to only 12 based on the Code Book. Many of the features were redundant or did not apply to predicting survival. <strong>Taking the time to understand the features in my initial dataset saved me the trouble of feature selection later on.</strong> I furthermore reduced the complexity of some of the features I retained; for example, there were over 19 classes for race. After removing duplicates, dropping null entries, and encoding categorical features, my dataset had 17 columns and 220,000 rows.</p>
-<p>My data was imbalanced, in that 84% of patients survive longer than 60 months (5 years), and only 16% do not.</p>
+<p><img src="images/funnel09.png" alt="Drug Discovery Process" width="800" align=“center”/></p>
 
 </div>
 </div>
@@ -1383,96 +1280,84 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Tools">Tools<a class="anchor-link" href="#Tools">&#182;</a></h3><ul>
-<li>Python • Pandas • Numpy • SciPy</li>
-<li>scikit-learn • imbalance • skopt</li>
-<li>Matplotlib • Seaborn • Tableau</li>
-<li>Flask • HTML • CSS • Javascript</li>
+<h3 id="Data">Data<a class="anchor-link" href="#Data">&#182;</a></h3><p>My data source was <a href="https://www.ebi.ac.uk/chembl/">ChEMBL</a>: a chemical database curated by the European Molecular Biology Laboratory. It was hosted on Google BigQuery and was also available for download as a PostgreSQL database. It contains information on over 1 million drug-like molecules in 77 tables. I decided to focus on small molecules. After cleaning the data and excluding any entries from the past 10 years, I was left with 432,000 entries. My dataset was highly imbalanced, as only 0.4% of these small molecules attained FDA approval.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Methods">Methods<a class="anchor-link" href="#Methods">&#182;</a></h3><h4 id="SQL"><em>SQL</em><a class="anchor-link" href="#SQL">&#182;</a></h4><p>I used the Google BigQuery Python Client Library <code>bigquery</code> and the helper class <code>bq_helper</code> to query the ChEMBL database. I performed a series of SQL queries to extract data from SQL tables into pandas dataframe.</p>
+<h4 id="Feature-Selection-&amp;-Engineering"><em>Feature Selection &amp; Engineering</em><a class="anchor-link" href="#Feature-Selection-&amp;-Engineering">&#182;</a></h4><p>The ‘COMPOUND_PROPERTIES’ table contained chemical properties of the molecules. These were mostly numerical features and were thus an obvious choice to include. Other tables contained more categorical variables with large numbers of levels. For assays (395 levels) and targets (9134 levels), I took their assigned parent class. For target organisms (2427 levels), I created a Boolean variable: human or not.</p>
+<p>I tallied the number of target organisms by molecule. The number of targets and activities were highly correlated, so I merged these into one feature by taking their average. These were also correlated with the number of assays, so I computed the ratio of this average with the number of assays.</p>
+<p>A given small molecule might have multiple activity entries -- in other words, it could have one or more targets and assays associated with it. I thus couldn't simply use <code>OneHotEncode</code> on these features, so I used <code>CountVectorize</code> to encode this information instead.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="images/targets_before_after_CV.png" alt="CountVectorize" width="800" align=“left”/></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A list of final features is given in my GitHub repository.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Pre-Processing"><em>Pre-Processing</em><a class="anchor-link" href="#Pre-Processing">&#182;</a></h4><p>Before sending my data into classifier algorithms, I had to preprocess it as follows:</p>
+<ul>
+<li>Impute missing values</li>
+<li>Scale numerical variables (for Logistic Regression) </li>
+<li>Count-Vectorize the categorical variables for which entries can take on &gt;1 level (assay, target)</li>
+<li>One-Hot-Encode the other categorical variables</li>
+<li>Engineer features</li>
 </ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Modeling">Modeling<a class="anchor-link" href="#Modeling">&#182;</a></h3><p>I examined a variety of models including: Logistic Regression, Support Vector Classifier (SVC), Random Forest, Gradient Boosting, Ada Boosting, Naive Bayes.</p>
-<p>To address the imbalanced nature of my dataset, I tried over- and under-sampling techniques, including: SMOTE, ADASYN (Over-sampling the minority class); Random Undersampling, Edited Nearest Neighbors, Near Miss (version 1
-and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-sampling the majority class); SMOTE + EEN, SMOTE + Tomek (combination over- and under-sampling). I also explored an ensemble method: <a href="https://imbalanced-learn.readthedocs.io/en/stable/generated/imblearn.ensemble.BalancedBaggingClassifier.html?highlight=balancedbagging#imblearn.ensemble.BalancedBaggingClassifier">Balanced Bagging</a></p>
-<p>I used stratified 5-fold cross-valdiation to assess models and over-/under-sampling methods. <strong>It was critical that I did the resampling with the cross-validation folds.</strong> When I did not, I observed overfitting for some of the models (Ada Boosting was particularly prone). Below is a function I used to automate this:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">assess_model_with_resamp</span><span class="p">(</span><span class="n">preprocessor</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Resamples data &#39;X&#39; and &#39;y&#39; using &#39;res&#39; method</span>
-<span class="sd">    Tests estimator &#39;model&#39; with preprocessing steps in &#39;preprocessor&#39; </span>
-<span class="sd">    All using Stratified &#39;n&#39;-fold cross-validation</span>
-<span class="sd">    Return ROC AUC score&#39;&#39;&#39;</span>
-
-    <span class="n">pipe</span> <span class="o">=</span>  <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;preprocessor&#39;</span><span class="p">,</span> <span class="n">preprocessor</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;classifier&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">)])</span>
-    <span class="n">cv</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">seed</span><span class="p">)</span>
-    <span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="ow">in</span> <span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="n">X_res</span><span class="p">,</span> <span class="n">y_res</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">fit_resample</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">train</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">train</span><span class="p">])</span>
-        <span class="n">pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_res</span><span class="p">,</span> <span class="n">y_res</span><span class="p">)</span>
-        <span class="n">y_proba</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">test</span><span class="p">])[:,</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">test</span><span class="p">],</span> <span class="n">y_proba</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h3><p>Resampling did not improve model performance. Paramter tuning yielded only modest improvement over the default values for promising models. The best-performing model was Gradient Boosting, using a deviance loss function, maximum depth of 3, a learning rate of 0.24, and 200 estimators. The average AUC from cross-valdiation on the training set was 0.75; on the test (hold-out) set it was 0.71.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/cm_heatmap.png" alt="Confusion Matrix" width="400" align=“center”/></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+<p>Because of the diversity of my feature datatypes, I decided to make use of scikit-learn’s Pipelines, using the <code>ColumnTransformer</code>, <code>FunctionTransformer</code>, and <code>FeatureUnion</code> functions. I also created custom <code>TransformerMixin</code> Classes to handle some of the preprocessing tasks. I will write a future blog post about how I did this. It took a lot of time to develop, but once I had the code working, processing my test dataset was a breeze.</p>
+<h4 id="Modeling"><em>Modeling</em><a class="anchor-link" href="#Modeling">&#182;</a></h4><p>I evaluated Logistic Regression, Random Forest, Bagged Decision Trees, and “vanilla” Gradient Boosting algorithms. These were all out-performed by CatBoost, an algorithm based on gradient boosting decision trees, which is especially fast and adept at handling categorical variables. I also investigated various methods of over- and under-sampling to address the imbalance in my dataset including SMOTE, ADASYN, Random Undersampling, Edited Nearest Neighbors, Near Miss versions 1 &amp; 3, SMOTE-EEN, SMOTE-Tomek, and assigning class weights. None improved the performance of my models.</p>
+<p>I then tuned the hyperparameters of CatBoost using <code>BayesSearchCV</code>. I may write a separate blog post on how I did this, as CatBoost is a newer algorithm and there are not a lot of examples out there on using it. Here, I report my final hyperparameters; while these details may border on boring, I feel it's important to share them in an effort to make my work reproducible:</p>
 <table>
 <thead><tr>
-<th>Statistic</th>
-<th>Value</th>
+<th>Hyperparameter</th>
+<th>Tuned Value</th>
+<th>Default </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Precision</td>
-<td>0.86</td>
+<td>Tree Depth</td>
+<td>7</td>
+<td>6</td>
 </tr>
 <tr>
-<td>Recall</td>
-<td>0.98</td>
+<td>Learning rate</td>
+<td>0.084</td>
+<td>0.03</td>
 </tr>
 <tr>
-<td>F1-score</td>
-<td>0.92</td>
+<td>L2 Regularization</td>
+<td>0.892</td>
+<td>3</td>
 </tr>
 <tr>
-<td>Specificity</td>
-<td>0.64</td>
+<td>Random Strength</td>
+<td>16.7</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Bagging Temperature</td>
+<td>0.55</td>
+<td>None</td>
 </tr>
 </tbody>
 </table>
@@ -1483,7 +1368,33 @@ and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-samp
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The false-negative rate is 1.5%, which is desirably low. The False-positive rate is somewhat high at 13%. Recall is excellent for the majority class, "Survived".</p>
+<h3 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The F1-score  for my training and test sets were as follows. The training score is from the <code>BayesSearchCV</code> hyper-tuning, which used 5-fold stratified cross-validation.</p>
+<table>
+<thead><tr>
+<th>Dataset</th>
+<th>F1-score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Train</td>
+<td>0.575</td>
+</tr>
+<tr>
+<td>Test</td>
+<td>0.593</td>
+</tr>
+</tbody>
+</table>
+<p>The test set actually had a higher F1-score than the training set, indicating that the model is not overfitting.</p>
+<p>I used a cost function to determine the best threshold to use. Based on industry numbers, I estimated the cost of a false-positive to be $\$$200 million (the cost to develop a drug) and the cost of a false-negative to be $\$$1 billion (lost revenue). Given the relatively high cost of a false-negative, the cost function is optimized at a low threshold (~ 0.15). The corresponding point on the Precision-Recall curve is shown below.</p>
 
 </div>
 </div>
@@ -1491,8 +1402,7 @@ and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-samp
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Inspecting the feature importances, we see, perhaps unsuprisingly, that age is the most important, followed by tumor size, the number of positive nodes, and stage.</p>
-<p><img src="images/feature_importance.png" alt="Feature Importances" width="500" align=“center”/></p>
+<p><img src="images/PR_CostFunction.png" alt="Cost Function" width="800" align=“left”/></p>
 
 </div>
 </div>
@@ -1500,7 +1410,7 @@ and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-samp
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Web-App">Web App<a class="anchor-link" href="#Web-App">&#182;</a></h3><p>I created a <a href="/flask/templates/index.html">web app</a> using flask to provide access to my model. Doctors and patients can enter in the tumor's characteristics at time of diagnosis and receive a prediction for 5-year survival. Patients with a poor prognosis could be flagged for more frequent follow-ups or more aggressive therapies.</p>
+<p>The most logical way in which to apply my model to the drug discovery process is early in the pipeline. This is essentially where the model was trained: on thousands of compounds, most of which never see the light of day. Using the model here, it could reduce the number of compounds under consideration at this stage, thereby expediting the screening process and reducing testing costs. It would furthermore increase our confidence in the molecules sent forward in the pipeline to Pre-Clinical testing. I estimate this could save 6-12 months and up to $\$$100 million.</p>
 
 </div>
 </div>
@@ -1508,9 +1418,7 @@ and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-samp
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Future-Work">Future Work<a class="anchor-link" href="#Future-Work">&#182;</a></h3><p>I had wanted to include molecular sub-type, Her2 +/- and HR +/-, in my model, but over 90% of the entries lacked this information. When a model was trained on a reduced-size dataset, including sub-type yielded only modest improvement over excluding it (0.67 vs 0.65 AUC, respectively). At this point in the learning curve (~20,000 entries), the training and test scores have not yet converged. It is thus plausible that acquiring more data for which sub-type and surivial are linked would yield an even better model.</p>
-<p>Furthermore, I would like to include additional molecular data. Multigene prognostic tests, such as PAM50 and OncoType DX, are in wide use today and measure the expression of over 50 genes. Machine learning has the power to examine each gene individually and provide a more nuanced assessment of the multitude of breat cancer types.</p>
-<p>Many of the features in my model are predictive of not just prognosis but also a cancer's response to a particular therapy. Tieing in treatment outcomes and side effects would assist in choosing an appropriate therapy. This is important not just for maximizing survival but also limiting side effects and improving a patient's quality of life.</p>
+<p><img src="images/ModelSavings.png" alt="Cost Function" width="600" align=“left”/></p>
 
 </div>
 </div>
@@ -1518,7 +1426,38 @@ and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-samp
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Code">Code<a class="anchor-link" href="#Code">&#182;</a></h3><p>You can find the code for this project here.</p>
+<p>1 year and $\$$100 million might seem paltry in the face of 10 years and $\$$1.4 billion but it’s a good first step towards reducing the time, expesne, and involved in bringing a new drug to market.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Future-Work">Future Work<a class="anchor-link" href="#Future-Work">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Include more bioactivity data</strong> I had grand visisons of ranking molecules according to their actvitiy; using NLP (natural language processing) to extract information from the assay descriptions; even creating a "Recommender System" for small molecules &amp; their targets (think of the small molecules as the 'users' and the targets as the 'items')...alas, time is finite.</p>
+<p><strong>Expand to Biologics</strong> Biologics are protein or protein fragment drugs. They are vastly more complex molecules than the small ones I examnined here, making their analysis more complicated. They are also where much of the innovation in drug discovery is occuring, so they are a worthwhile challenge to take on.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Code">Code<a class="anchor-link" href="#Code">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can find the code for this project <a href="https://github.com/kbfreder/small-molecules">here</a>.</p>
 
 </div>
 </div>
@@ -1559,8 +1498,10 @@ and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-samp
   <div class="tag-cloud">
     <p>
       <a href="https://kbfreder.github.io/tag/metis.html">Metis</a>
+      <a href="https://kbfreder.github.io/tag/sql.html">SQL</a>
+      <a href="https://kbfreder.github.io/tag/catboost.html">CatBoost</a>
+      <a href="https://kbfreder.github.io/tag/drug-discovery.html">drug discovery</a>
       <a href="https://kbfreder.github.io/tag/classification.html">classification</a>
-      <a href="https://kbfreder.github.io/tag/flask.html">flask</a>
     </p>
   </div>
 
