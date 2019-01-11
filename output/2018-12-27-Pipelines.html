@@ -1,0 +1,2074 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+            <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <title>Pipelines</title>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="https://kbfreder.github.io/theme/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="https://kbfreder.github.io/theme/css/clean-blog.min.css" rel="stylesheet">
+
+        <!-- Code highlight color scheme -->
+            <link href="https://kbfreder.github.io/theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+
+        <!-- Custom Fonts -->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+        <meta name="description" content="Building custom preprocessing pipelines in scikit-learn">
+
+        <meta name="author" content="Kendra Frederick">
+
+        <meta name="tags" content="tips & tricks">
+        <meta name="tags" content="scikit-learn">
+        <meta name="tags" content="pipelines">
+
+	                <meta property="og:locale" content="">
+		<meta property="og:site_name" content="Data Science: A Scenic Date">
+
+	<meta property="og:type" content="article">
+            <meta property="article:author" content="https://kbfreder.github.io/author/kendra-frederick.html">
+	<meta property="og:url" content="https://kbfreder.github.io/2018-12-27-Pipelines.html">
+	<meta property="og:title" content="Pipelines">
+	<meta property="article:published_time" content="2018-12-27 00:00:00-08:00">
+            <meta property="og:description" content="Building custom preprocessing pipelines in scikit-learn">
+
+            <meta property="og:image" content="https://kbfreder.github.io/theme/images/post-bg.jpg">
+</head>
+
+<body class="article-2018-12-27-Pipelines">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="https://kbfreder.github.io/">Data Science: A Scenic Date</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/categories.html">Categories</a></li>
+                        <li><a href="/tags.html">Tags</a></li>
+                        <li><a href="/pages/about.html#about">About Me</a></li>
+
+                            <li><a href="https://kbfreder.github.io/pages/about.html">About Me</a></li>
+                            <li><a href="https://kbfreder.github.io/pages/contact.html">Contact Me</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-color: blue">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>Pipelines</h1>
+                        <span class="meta">Posted by
+                                <a href="https://kbfreder.github.io/author/kendra-frederick.html">Kendra Frederick</a>
+                             on Thu 27 December 2018
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <style type="text/css">/*!
+*
+* IPython notebook
+*
+*/
+/* CSS font colors for translated ANSI escape sequences */
+/* The color values are a mix of
+   http://www.xcolors.net/dl/baskerville-ivorylight and
+   http://www.xcolors.net/dl/euphrasia */
+.ansi-black-fg {
+  color: #3E424D;
+}
+.ansi-black-bg {
+  background-color: #3E424D;
+}
+.ansi-black-intense-fg {
+  color: #282C36;
+}
+.ansi-black-intense-bg {
+  background-color: #282C36;
+}
+.ansi-red-fg {
+  color: #E75C58;
+}
+.ansi-red-bg {
+  background-color: #E75C58;
+}
+.ansi-red-intense-fg {
+  color: #B22B31;
+}
+.ansi-red-intense-bg {
+  background-color: #B22B31;
+}
+.ansi-green-fg {
+  color: #00A250;
+}
+.ansi-green-bg {
+  background-color: #00A250;
+}
+.ansi-green-intense-fg {
+  color: #007427;
+}
+.ansi-green-intense-bg {
+  background-color: #007427;
+}
+.ansi-yellow-fg {
+  color: #DDB62B;
+}
+.ansi-yellow-bg {
+  background-color: #DDB62B;
+}
+.ansi-yellow-intense-fg {
+  color: #B27D12;
+}
+.ansi-yellow-intense-bg {
+  background-color: #B27D12;
+}
+.ansi-blue-fg {
+  color: #208FFB;
+}
+.ansi-blue-bg {
+  background-color: #208FFB;
+}
+.ansi-blue-intense-fg {
+  color: #0065CA;
+}
+.ansi-blue-intense-bg {
+  background-color: #0065CA;
+}
+.ansi-magenta-fg {
+  color: #D160C4;
+}
+.ansi-magenta-bg {
+  background-color: #D160C4;
+}
+.ansi-magenta-intense-fg {
+  color: #A03196;
+}
+.ansi-magenta-intense-bg {
+  background-color: #A03196;
+}
+.ansi-cyan-fg {
+  color: #60C6C8;
+}
+.ansi-cyan-bg {
+  background-color: #60C6C8;
+}
+.ansi-cyan-intense-fg {
+  color: #258F8F;
+}
+.ansi-cyan-intense-bg {
+  background-color: #258F8F;
+}
+.ansi-white-fg {
+  color: #C5C1B4;
+}
+.ansi-white-bg {
+  background-color: #C5C1B4;
+}
+.ansi-white-intense-fg {
+  color: #A1A6B2;
+}
+.ansi-white-intense-bg {
+  background-color: #A1A6B2;
+}
+.ansi-default-inverse-fg {
+  color: #FFFFFF;
+}
+.ansi-default-inverse-bg {
+  background-color: #000000;
+}
+.ansi-bold {
+  font-weight: bold;
+}
+.ansi-underline {
+  text-decoration: underline;
+}
+/* The following styles are deprecated an will be removed in a future version */
+.ansibold {
+  font-weight: bold;
+}
+.ansi-inverse {
+  outline: 0.5px dotted;
+}
+/* use dark versions for foreground, to improve visibility */
+.ansiblack {
+  color: black;
+}
+.ansired {
+  color: darkred;
+}
+.ansigreen {
+  color: darkgreen;
+}
+.ansiyellow {
+  color: #c4a000;
+}
+.ansiblue {
+  color: darkblue;
+}
+.ansipurple {
+  color: darkviolet;
+}
+.ansicyan {
+  color: steelblue;
+}
+.ansigray {
+  color: gray;
+}
+/* and light for background, for the same reason */
+.ansibgblack {
+  background-color: black;
+}
+.ansibgred {
+  background-color: red;
+}
+.ansibggreen {
+  background-color: green;
+}
+.ansibgyellow {
+  background-color: yellow;
+}
+.ansibgblue {
+  background-color: blue;
+}
+.ansibgpurple {
+  background-color: magenta;
+}
+.ansibgcyan {
+  background-color: cyan;
+}
+.ansibggray {
+  background-color: gray;
+}
+div.cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 2px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
+  width: 100%;
+  padding: 5px;
+  /* This acts as a spacer between cells, that is outside the border */
+  margin: 0px;
+  outline: none;
+  position: relative;
+  overflow: visible;
+}
+div.cell:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: transparent;
+}
+div.cell.jupyter-soft-selected {
+  border-left-color: #E3F2FD;
+  border-left-width: 1px;
+  padding-left: 5px;
+  border-right-color: #E3F2FD;
+  border-right-width: 1px;
+  background: #E3F2FD;
+}
+@media print {
+  div.cell.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+div.cell.selected,
+div.cell.selected.jupyter-soft-selected {
+  border-color: #ababab;
+}
+div.cell.selected:before,
+div.cell.selected.jupyter-soft-selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #42A5F5;
+}
+@media print {
+  div.cell.selected,
+  div.cell.selected.jupyter-soft-selected {
+    border-color: transparent;
+  }
+}
+.edit_mode div.cell.selected {
+  border-color: #66BB6A;
+}
+.edit_mode div.cell.selected:before {
+  position: absolute;
+  display: block;
+  top: -1px;
+  left: -1px;
+  width: 5px;
+  height: calc(100% +  2px);
+  content: '';
+  background: #66BB6A;
+}
+@media print {
+  .edit_mode div.cell.selected {
+    border-color: transparent;
+  }
+}
+.prompt {
+  /* This needs to be wide enough for 3 digit prompt numbers: In[100]: */
+  min-width: 14ex;
+  /* This padding is tuned to match the padding on the CodeMirror editor. */
+  padding: 0.4em;
+  margin: 0px;
+  font-family: monospace;
+  text-align: right;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+  /* Don't highlight prompt number selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* Use default cursor */
+  cursor: default;
+}
+@media (max-width: 540px) {
+  .prompt {
+    text-align: left;
+  }
+}
+div.inner_cell {
+  min-width: 0;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_area {
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+  background: #f7f7f7;
+  line-height: 1.21429em;
+}
+/* This is needed so that empty prompt areas can collapse to zero height when there
+   is no content in the output_subarea and the prompt. The main purpose of this is
+   to make sure that empty JavaScript output_subareas have no height. */
+div.prompt:empty {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+div.unrecognized_cell {
+  padding: 5px 5px 5px 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.unrecognized_cell .inner_cell {
+  border-radius: 2px;
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+  border: 1px solid #cfcfcf;
+  background: #eaeaea;
+}
+div.unrecognized_cell .inner_cell a {
+  color: inherit;
+  text-decoration: none;
+}
+div.unrecognized_cell .inner_cell a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+@media (max-width: 540px) {
+  div.unrecognized_cell > div.prompt {
+    display: none;
+  }
+}
+div.code_cell {
+  /* avoid page breaking on code cells when printing */
+}
+@media print {
+  div.code_cell {
+    page-break-inside: avoid;
+  }
+}
+/* any special styling for code cells that are currently running goes here */
+div.input {
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.input {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+/* input_area and input_prompt must match in top border and margin for alignment */
+div.input_prompt {
+  color: #303F9F;
+  border-top: 1px solid transparent;
+}
+div.input_area > div.highlight {
+  margin: 0.4em;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+div.input_area > div.highlight > pre {
+  margin: 0px;
+  border: none;
+  padding: 0px;
+  background-color: transparent;
+}
+/* The following gets added to the <head> if it is detected that the user has a
+ * monospace font with inconsistent normal/bold/italic height.  See
+ * notebookmain.js.  Such fonts will have keywords vertically offset with
+ * respect to the rest of the text.  The user should select a better font.
+ * See: https://github.com/ipython/ipython/issues/1503
+ *
+ * .CodeMirror span {
+ *      vertical-align: bottom;
+ * }
+ */
+.CodeMirror {
+  line-height: 1.21429em;
+  /* Changed from 1em to our global default */
+  font-size: 14px;
+  height: auto;
+  /* Changed to auto to autogrow */
+  background: none;
+  /* Changed from white to allow our bg to show through */
+}
+.CodeMirror-scroll {
+  /*  The CodeMirror docs are a bit fuzzy on if overflow-y should be hidden or visible.*/
+  /*  We have found that if it is visible, vertical scrollbars appear with font size changes.*/
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.CodeMirror-lines {
+  /* In CM2, this used to be 0.4em, but in CM3 it went to 4px. We need the em value because */
+  /* we have set a different line-height and want this to scale with that. */
+  /* Note that this should set vertical padding only, since CodeMirror assumes
+       that horizontal padding will be set on CodeMirror pre */
+  padding: 0.4em 0;
+}
+.CodeMirror-linenumber {
+  padding: 0 8px 0 4px;
+}
+.CodeMirror-gutters {
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+.CodeMirror pre {
+  /* In CM3 this went to 4px from 0 in CM2. This sets horizontal padding only,
+    use .CodeMirror-lines for vertical */
+  padding: 0 0.4em;
+  border: 0;
+  border-radius: 0;
+}
+.CodeMirror-cursor {
+  border-left: 1.4px solid black;
+}
+@media screen and (min-width: 2138px) and (max-width: 4319px) {
+  .CodeMirror-cursor {
+    border-left: 2px solid black;
+  }
+}
+@media screen and (min-width: 4320px) {
+  .CodeMirror-cursor {
+    border-left: 4px solid black;
+  }
+}
+/*
+
+Original style from softwaremaniacs.org (c) Ivan Sagalaev <Maniac@SoftwareManiacs.Org>
+Adapted from GitHub theme
+
+*/
+.highlight-base {
+  color: #000;
+}
+.highlight-variable {
+  color: #000;
+}
+.highlight-variable-2 {
+  color: #1a1a1a;
+}
+.highlight-variable-3 {
+  color: #333333;
+}
+.highlight-string {
+  color: #BA2121;
+}
+.highlight-comment {
+  color: #408080;
+  font-style: italic;
+}
+.highlight-number {
+  color: #080;
+}
+.highlight-atom {
+  color: #88F;
+}
+.highlight-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.highlight-builtin {
+  color: #008000;
+}
+.highlight-error {
+  color: #f00;
+}
+.highlight-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.highlight-meta {
+  color: #AA22FF;
+}
+/* previously not defined, copying from default codemirror */
+.highlight-def {
+  color: #00f;
+}
+.highlight-string-2 {
+  color: #f50;
+}
+.highlight-qualifier {
+  color: #555;
+}
+.highlight-bracket {
+  color: #997;
+}
+.highlight-tag {
+  color: #170;
+}
+.highlight-attribute {
+  color: #00c;
+}
+.highlight-header {
+  color: blue;
+}
+.highlight-quote {
+  color: #090;
+}
+.highlight-link {
+  color: #00c;
+}
+/* apply the same style to codemirror */
+.cm-s-ipython span.cm-keyword {
+  color: #008000;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-atom {
+  color: #88F;
+}
+.cm-s-ipython span.cm-number {
+  color: #080;
+}
+.cm-s-ipython span.cm-def {
+  color: #00f;
+}
+.cm-s-ipython span.cm-variable {
+  color: #000;
+}
+.cm-s-ipython span.cm-operator {
+  color: #AA22FF;
+  font-weight: bold;
+}
+.cm-s-ipython span.cm-variable-2 {
+  color: #1a1a1a;
+}
+.cm-s-ipython span.cm-variable-3 {
+  color: #333333;
+}
+.cm-s-ipython span.cm-comment {
+  color: #408080;
+  font-style: italic;
+}
+.cm-s-ipython span.cm-string {
+  color: #BA2121;
+}
+.cm-s-ipython span.cm-string-2 {
+  color: #f50;
+}
+.cm-s-ipython span.cm-meta {
+  color: #AA22FF;
+}
+.cm-s-ipython span.cm-qualifier {
+  color: #555;
+}
+.cm-s-ipython span.cm-builtin {
+  color: #008000;
+}
+.cm-s-ipython span.cm-bracket {
+  color: #997;
+}
+.cm-s-ipython span.cm-tag {
+  color: #170;
+}
+.cm-s-ipython span.cm-attribute {
+  color: #00c;
+}
+.cm-s-ipython span.cm-header {
+  color: blue;
+}
+.cm-s-ipython span.cm-quote {
+  color: #090;
+}
+.cm-s-ipython span.cm-link {
+  color: #00c;
+}
+.cm-s-ipython span.cm-error {
+  color: #f00;
+}
+.cm-s-ipython span.cm-tab {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
+  background-position: right;
+  background-repeat: no-repeat;
+}
+div.output_wrapper {
+  /* this position must be relative to enable descendents to be absolute within it */
+  position: relative;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 1;
+}
+/* class for the output area when it should be height-limited */
+div.output_scroll {
+  /* ideally, this would be max-height, but FF barfs all over that */
+  height: 24em;
+  /* FF needs this *and the wrapper* to specify full width, or it will shrinkwrap */
+  width: 100%;
+  overflow: auto;
+  border-radius: 2px;
+  -webkit-box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+  display: block;
+}
+/* output div while it is collapsed */
+div.output_collapsed {
+  margin: 0px;
+  padding: 0px;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+div.out_prompt_overlay {
+  height: 100%;
+  padding: 0px 0.4em;
+  position: absolute;
+  border-radius: 2px;
+}
+div.out_prompt_overlay:hover {
+  /* use inner shadow to get border that is computed the same on WebKit/FF */
+  -webkit-box-shadow: inset 0 0 1px #000;
+  box-shadow: inset 0 0 1px #000;
+  background: rgba(240, 240, 240, 0.5);
+}
+div.output_prompt {
+  color: #D84315;
+}
+/* This class is the outer container of all output sections. */
+div.output_area {
+  padding: 0px;
+  page-break-inside: avoid;
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+div.output_area .MathJax_Display {
+  text-align: left !important;
+}
+div.output_area 
+div.output_area 
+div.output_area img,
+div.output_area svg {
+  max-width: 100%;
+  height: auto;
+}
+div.output_area img.unconfined,
+div.output_area svg.unconfined {
+  max-width: none;
+}
+div.output_area .mglyph > img {
+  max-width: none;
+}
+/* This is needed to protect the pre formating from global settings such
+   as that of bootstrap */
+.output {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.output_area {
+    /* Old browsers */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-align: stretch;
+    display: -moz-box;
+    -moz-box-orient: vertical;
+    -moz-box-align: stretch;
+    display: box;
+    box-orient: vertical;
+    box-align: stretch;
+    /* Modern browsers */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+div.output_area pre {
+  margin: 0;
+  padding: 1px 0 1px 0;
+  border: 0;
+  vertical-align: baseline;
+  color: black;
+  background-color: transparent;
+  border-radius: 0;
+}
+/* This class is for the output subarea inside the output_area and after
+   the prompt div. */
+div.output_subarea {
+  overflow-x: auto;
+  padding: 0.4em;
+  /* Old browsers */
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+  /* Modern browsers */
+  flex: 1;
+  max-width: calc(100% - 14ex);
+}
+div.output_scroll div.output_subarea {
+  overflow-x: visible;
+}
+/* The rest of the output_* classes are for special styling of the different
+   output types */
+/* all text output has this class: */
+div.output_text {
+  text-align: left;
+  color: #000;
+  /* This has to match that of the the CodeMirror class line-height below */
+  line-height: 1.21429em;
+}
+/* stdout/stderr are 'text' as well as 'stream', but execute_result/error are *not* streams */
+div.output_stderr {
+  background: #fdd;
+  /* very light red background for stderr */
+}
+div.output_latex {
+  text-align: left;
+}
+/* Empty output_javascript divs should have no height */
+div.output_javascript:empty {
+  padding: 0;
+}
+.js-error {
+  color: darkred;
+}
+/* raw_input styles */
+div.raw_input_container {
+  line-height: 1.21429em;
+  padding-top: 5px;
+}
+pre.raw_input_prompt {
+  /* nothing needed here. */
+}
+input.raw_input {
+  font-family: monospace;
+  font-size: inherit;
+  color: inherit;
+  width: auto;
+  /* make sure input baseline aligns with prompt */
+  vertical-align: baseline;
+  /* padding + margin = 0.5em between prompt and cursor */
+  padding: 0em 0.25em;
+  margin: 0em 0.25em;
+}
+input.raw_input:focus {
+  box-shadow: none;
+}
+p.p-space {
+  margin-bottom: 10px;
+}
+div.output_unrecognized {
+  padding: 5px;
+  font-weight: bold;
+  color: red;
+}
+div.output_unrecognized a {
+  color: inherit;
+  text-decoration: none;
+}
+div.output_unrecognized a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+.rendered_html {
+  color: #000;
+  /* any extras will just be numbers: */
+}
+
+
+
+.rendered_html :link {
+  text-decoration: underline;
+}
+.rendered_html :visited {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+.rendered_html h1:first-child {
+  margin-top: 0.538em;
+}
+.rendered_html h2:first-child {
+  margin-top: 0.636em;
+}
+.rendered_html h3:first-child {
+  margin-top: 0.777em;
+}
+.rendered_html h4:first-child {
+  margin-top: 1em;
+}
+.rendered_html h5:first-child {
+  margin-top: 1em;
+}
+.rendered_html h6:first-child {
+  margin-top: 1em;
+}
+.rendered_html ul:not(.list-inline),
+.rendered_html ol:not(.list-inline) {
+  padding-left: 2em;
+}
+
+
+
+
+
+
+
+
+.rendered_html * + ul {
+  margin-top: 1em;
+}
+.rendered_html * + ol {
+  margin-top: 1em;
+}
+
+
+
+
+
+.rendered_html pre,
+
+
+
+
+.rendered_html tr,
+.rendered_html th,
+
+
+.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+.rendered_html * + table {
+  margin-top: 1em;
+}
+
+.rendered_html * + p {
+  margin-top: 1em;
+}
+
+.rendered_html * + img {
+  margin-top: 1em;
+}
+.rendered_html img,
+
+.rendered_html img.unconfined,
+
+
+.rendered_html * + .alert {
+  margin-top: 1em;
+}
+[dir="rtl"] 
+div.text_cell {
+  /* Old browsers */
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+  /* Modern browsers */
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+@media (max-width: 540px) {
+  div.text_cell > div.prompt {
+    display: none;
+  }
+}
+div.text_cell_render {
+  /*font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;*/
+  outline: none;
+  resize: none;
+  width: inherit;
+  border-style: none;
+  padding: 0.5em 0.5em 0.5em 0.4em;
+  color: #000;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+a.anchor-link:link {
+  text-decoration: none;
+  padding: 0px 20px;
+  visibility: hidden;
+}
+h1:hover .anchor-link,
+h2:hover .anchor-link,
+h3:hover .anchor-link,
+h4:hover .anchor-link,
+h5:hover .anchor-link,
+h6:hover .anchor-link {
+  visibility: visible;
+}
+.text_cell.rendered .input_area {
+  display: none;
+}
+.text_cell.rendered 
+.text_cell.rendered .rendered_html tr,
+.text_cell.rendered .rendered_html th,
+.text_cell.rendered 
+.text_cell.unrendered .text_cell_render {
+  display: none;
+}
+.text_cell .dropzone .input_area {
+  border: 2px dashed #bababa;
+  margin: -1px;
+}
+.cm-header-1,
+.cm-header-2,
+.cm-header-3,
+.cm-header-4,
+.cm-header-5,
+.cm-header-6 {
+  font-weight: bold;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.cm-header-1 {
+  font-size: 185.7%;
+}
+.cm-header-2 {
+  font-size: 157.1%;
+}
+.cm-header-3 {
+  font-size: 128.6%;
+}
+.cm-header-4 {
+  font-size: 110%;
+}
+.cm-header-5 {
+  font-size: 100%;
+  font-style: italic;
+}
+.cm-header-6 {
+  font-size: 100%;
+  font-style: italic;
+}
+</style>
+<style type="text/css">.highlight .hll { background-color: #ffffcc }
+.highlight  { background: #f8f8f8; }
+.highlight .c { color: #408080; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #FF0000 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666666 } /* Operator */
+.highlight .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #BC7A00 } /* Comment.Preproc */
+.highlight .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #408080; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #408080; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .gr { color: #FF0000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #00A000 } /* Generic.Inserted */
+.highlight .go { color: #888888 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #0044DD } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #7D9029 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.highlight .no { color: #880000 } /* Name.Constant */
+.highlight .nd { color: #AA22FF } /* Name.Decorator */
+.highlight .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #0000FF } /* Name.Function */
+.highlight .nl { color: #A0A000 } /* Name.Label */
+.highlight .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #bbbbbb } /* Text.Whitespace */
+.highlight .mb { color: #666666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666666 } /* Literal.Number.Float */
+.highlight .mh { color: #666666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #BB6688 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #0000FF } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666666 } /* Literal.Number.Integer.Long */</style>
+<style type="text/css">
+/* Temporary definitions which will become obsolete with Notebook release 5.0 */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+</style>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Building-flexible-custom-pipelines-in-scikit-learn"><em>Building flexible custom pipelines in scikit-learn</em><a class="anchor-link" href="#Building-flexible-custom-pipelines-in-scikit-learn">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Motivation">Motivation<a class="anchor-link" href="#Motivation">&#182;</a></h3><p>Some datasets are simple: they're entirely comprised of numeric features that all need to be scaled. Or maybe there are a few Categorical columns and your model doesn't require scaling of the numerical features. Rejoice, for your preprocessing will be easy.</p>
+<p>But what if you have a diverse dataset, or your preprocessing needs are more complex, or you want to preprocess your training and test data with a single line of code: this calls for exploiting scikit-learn's many preprocessing and pipeline functions. This blog post examines how (and when) to use <code>Pipeline</code> (or <code>make_pipeline</code>), <code>ColumnTransformer</code>, <code>FunctionTransformer</code>, and <code>FeatureUnion</code> to create custom transformation pipelines.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="The-Data">The Data<a class="anchor-link" href="#The-Data">&#182;</a></h3><p>The dataset that motivated this deep dive into the flexibility (and potential to confuse) of scikit-learn's customizable pipelines contained the following types of data:</p>
+<ul>
+<li>Numerical</li>
+<li>Categorical - two flavors:<ul>
+<li>value could be 1 of several (ex: 'acid', or 'base')</li>
+<li>value could be 1 <em>or more</em> of several (ex: 'protein, nucleic acid', or 'tissue')</li>
+</ul>
+</li>
+<li>Boolean<ul>
+<li>1 = True, 0 = False</li>
+</ul>
+</li>
+<li>Engineered Features <ul>
+<li>mathematical combinations of two or more other columns</li>
+</ul>
+</li>
+</ul>
+<p>In addition, I wanted to test out Logistic Regression, tree-based models (Gradient Boosting Decision Trees), and CatBoost. Each required different preprocessing, but there were transformers in common between them. I opted to build up my pipelines using a "unit" approach. This made the final pipeline creation facile and flexible.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="The-Players">The Players<a class="anchor-link" href="#The-Players">&#182;</a></h3><p><strong>Pipeline</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>    from sklearn.pipeline import Pipeline, make_pipeline</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Arguably the most commonly used and most familiar to Data Scientists, <code>Pipeline</code> processes data sequentially according to the defined steps. It passes the output of the first step into the second, and so on. The final step can be and often is an estimator (i.e. a model to fit your data against). The <code>make_pipeline</code> offers a less-verbose way of creating a pipeline.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>    pipe = Pipeline([('scale', StandardScaler()), ('model', LogisticRegression())])
+    same_pipe = make_pipeline(StandardScaler(), LogisticRegression())</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>ColumnTransformer</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="k">import</span> <span class="n">ColumnTransformer</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A powerful ally in the quest to create a custom pipeline is <code>ColumnTransformer</code>. You feed it a list of transformers, which themselves are tuples of a user-defined transformer name, the transformer function, and the column indices to transform. Below is an example:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preprocessor</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">(</span><span class="n">transformers</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;scaler&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">(),</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;encoder&#39;</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">(),</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+    <span class="p">],</span> <span class="n">remainder</span><span class="o">=</span><span class="s1">&#39;passthrough&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This provides the flexibility to apply transformers to a subset of columns in your dataframe. You can specify whether to pass-through or drop the remaining columns. If you only need to transform a subset of your columns, using <code>ColumnTransformer</code> with <code>remainder=passthrough</code> is an efficient way to do so, as shown in the example above.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>FeatureUnion</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="k">import</span> <span class="n">FeatureUnion</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>FeatureUnion</code> takes a list of transformers as an argument (technically tuples of the format: <code>(&lt;name&gt;, &lt;transformer&gt;)</code>), performs them separately on the data, and concatenates the outputs together. Using the (default) <code>remainder=drop</code> option of <code>ColumnTransformer</code> coupled with <code>FeatureUnion</code> is akin to the split-apply-combine dogma of groupby &amp; apply/aggregate. This can be useful when you want to define transformations piece-by-piece and formulate different combinations of them depending on model requirements.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preprocessor</span> <span class="o">=</span> <span class="n">FeatureUnion</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">&#39;some_cols&#39;</span><span class="p">,</span> <span class="n">custom_transformer_01</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;other_cols&#39;</span><span class="p">,</span> <span class="n">custom_transformer_02</span><span class="p">)</span>
+        <span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Custom functions and classes</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">FunctionTransformer</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>FunctionTransformer</code> allows us to use an "arbitrary callable", such as a simple function, as a preprocessing transformer. This is useful for stateless transformations, like taking the log of something.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">double</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">X</span> <span class="o">*</span> <span class="mi">2</span>
+
+<span class="n">preproc_cv</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;doubler&#39;</span><span class="p">,</span> <span class="n">FunctionTransformer</span><span class="p">(</span><span class="n">double</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Building-the-Pipeline-Pieces">Building the Pipeline Pieces<a class="anchor-link" href="#Building-the-Pipeline-Pieces">&#182;</a></h3><p>Now that we've introduced the scikit-learn functions, let's return to our data and begin to construct a pipeline.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># other functions and packages we&#39;ll need to load</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span><span class="p">,</span> <span class="n">OneHotEncoder</span> 
+<span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="k">import</span> <span class="n">CountVectorizer</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Categorical Variables with &gt;1 possible value</strong></p>
+<p>For the categorical variables that could take on more than one value, I use the <code>CountVectorize</code> function. (See <a href="https://kbfreder.github.io/2018-12-12-Small-Molecules.html#2018-12-12-Small-Molecules" target="_blank">this blog post</a> for details on how this function is used as a preprocessor for this data.) One column, <em>target_classes</em>, first needed to have missing values imputed. I create a custom class for this, which returns only the column of interest (this is analogous to setting <code>remainder=drop</code>).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># custom imputation class</span>
+<span class="k">class</span> <span class="nc">Imputer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Fills in missing (na) values in &#39;col_name&#39; column with &#39;imp_val&#39; &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">col_name</span><span class="p">,</span> <span class="n">imp_val</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">col_name</span> <span class="o">=</span> <span class="n">col_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imp_val</span> <span class="o">=</span> <span class="n">imp_val</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">X</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">col_name</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">imp_val</span><span class="p">)</span>
+
+<span class="c1"># define transformer function: CountVectorize with a custom token_pattern</span>
+<span class="n">target_transformer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">token_pattern</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;([\w*-]{1,}),*&#39;</span><span class="p">)</span>
+
+<span class="c1"># define preprocessor </span>
+<span class="n">preproc_target</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">&#39;impute&#39;</span><span class="p">,</span> <span class="n">Imputer</span><span class="p">(</span><span class="s1">&#39;target_classes&#39;</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">&#39;target_cv&#39;</span><span class="p">,</span> <span class="n">target_transformer</span><span class="p">)</span>
+<span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The other column, <em>assay_types</em>, can be Count-Vectorized directly with a custom token pattern. Note that the <code>CountVectorize</code> function requires that the column indices be provided as a scalar.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># define the column indices to transform</span>
+<span class="n">asy_cls_col</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;assay_types&#39;</span><span class="p">)</span>
+
+<span class="c1"># define transformer function: CountVectorize with a custom token_pattern</span>
+<span class="n">assay_transformer</span> <span class="o">=</span> <span class="n">CountVectorizer</span><span class="p">(</span><span class="n">lowercase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">token_pattern</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;\[*(\w</span><span class="si">{1}</span><span class="s1">),*\]*&#39;</span><span class="p">,</span> <span class="p">)</span>
+
+<span class="c1"># define preprocessor</span>
+<span class="n">preproc_assay</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">(</span><span class="n">transformers</span><span class="o">=</span><span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;assay_cv&#39;</span><span class="p">,</span> <span class="n">assay_transformer</span><span class="p">,</span> <span class="n">asy_cls_col</span><span class="p">)</span>
+<span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Next, I sew these two steps together into one preprocessor (named 'cv' for CountVectorize) using <code>Pipeline</code> and <code>FeatureUnion</code>. Recall that: <code>Pipeline</code> processes data sequentially, passing the output of the first step into the second, and so on, and <code>FeatureUnion</code> performs the transformations separately, then concatenates the results together.</p>
+<p>Note that the output of <code>CountVectorize</code> is a sparse (CSR) matrix; some of the models I plan to evaluate require a dense matrix, so I convert the output to an <em>ndarray</em> using a user-defined function, <em>densify</em>, and <code>FunctionTransformer</code>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">densify</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+
+<span class="n">preproc_cv</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;cv&#39;</span><span class="p">,</span> <span class="n">FeatureUnion</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">&#39;assays&#39;</span><span class="p">,</span> <span class="n">preproc_assay</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;targets&#39;</span><span class="p">,</span> <span class="n">preproc_target</span><span class="p">)</span>
+        <span class="p">])),</span>
+    <span class="p">(</span><span class="s1">&#39;densify&#39;</span><span class="p">,</span> <span class="n">FunctionTransformer</span><span class="p">(</span><span class="n">densify</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Categorical variables with only 1 possible value</strong></p>
+<p>More typically, categorical variables can only take on one value, and thus we can use scikit-learn's <code>OneHotEncode</code> function to encode this information. It's worth noting that the newer algorithm CatBoost <a href="https://tech.yandex.com/catboost/doc/dg/features/categorical-features-docpage/#dataset-processing" target="_blank">does not require</a> encoding of single-value categorical variables prior to feeding the data into the model.</p>
+<p>I perform this preprocessing step using <code>ColumnTransformer</code> so I can specify which columns to encode. Note that in contrast to <code>CountVectorize</code> above, <code>OneHotEncode</code> requires that columns indices be specified in list format.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># define categorical columns to encode &amp; make a list of their indices</span>
+<span class="n">cols_to_encode</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;molecular_species&#39;</span><span class="p">]</span>
+<span class="n">cols_to_encode_idx</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cols_to_encode</span><span class="p">]</span>
+
+<span class="c1"># define preprocessor</span>
+<span class="n">preproc_ohe</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">(</span><span class="n">transformers</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;cat&#39;</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">(),</span> <span class="n">cols_to_encode_idx</span><span class="p">)])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Numeric features</strong></p>
+<p>Logistic Regression requires (sometimes -- see <a href='#footnote-01'>Footnote 1</a>) numerical data to be scaled. I again use <code>ColumnTransformer</code> to specify which columns to transform with <code>StandardScaler</code>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># define columns to scale &amp; make a list of their indices.</span>
+<span class="n">cols_to_scale</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mw_freebase&#39;</span><span class="p">,</span> <span class="s1">&#39;alogp&#39;</span><span class="p">,</span> <span class="s1">&#39;acd_logp&#39;</span><span class="p">,</span> <span class="s1">&#39;acd_logd&#39;</span><span class="p">,</span> <span class="s1">&#39;hba&#39;</span><span class="p">,</span> <span class="s1">&#39;hbd&#39;</span><span class="p">,</span> <span class="s1">&#39;psa&#39;</span><span class="p">,</span> <span class="s1">&#39;rtb&#39;</span><span class="p">,</span> 
+       <span class="s1">&#39;num_ro5_violations&#39;</span><span class="p">,</span> <span class="s1">&#39;aromatic_rings&#39;</span><span class="p">,</span> <span class="s1">&#39;heavy_atoms&#39;</span><span class="p">,</span> <span class="s1">&#39;hba_lipinski&#39;</span><span class="p">,</span> <span class="s1">&#39;hbd_lipinski&#39;</span><span class="p">,</span>  
+       <span class="s1">&#39;num_target_organisms&#39;</span><span class="p">,</span> <span class="s1">&#39;num_alerts_set1&#39;</span><span class="p">]</span>
+<span class="n">cols_to_scale_idx</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cols_to_scale</span><span class="p">]</span>
+
+<span class="c1"># apply preprocessor</span>
+<span class="n">preproc_scale</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">(</span><span class="n">transformers</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;num&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">cols_to_scale_idx</span><span class="p">),</span> 
+    <span class="p">],</span> <span class="n">remainder</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span><span class="p">)</span>    
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Features to leave un-touched</strong></p>
+<p>These features are already Boolean-encoded, where 1 = True and 0 = False. They will need to be identified as categorical features in CatBoost. I again use <code>ColumnTransformer</code> and instead of specifying a transformer, I use the special string <code>passthrough</code> to indicate that this is what I want done with these columns.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># define columns and a list of their indices</span>
+<span class="n">cols_to_pass</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ro3_pass&#39;</span><span class="p">,</span> <span class="s1">&#39;research_co&#39;</span><span class="p">,</span><span class="s1">&#39;human_target&#39;</span><span class="p">]</span>
+<span class="n">cols_to_pass_idx</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cols_to_pass</span><span class="p">]</span>
+
+<span class="c1"># define preprocessor</span>
+<span class="n">preproc_pass</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">(</span><span class="n">transformers</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;as_is&#39;</span><span class="p">,</span> <span class="s1">&#39;passthrough&#39;</span><span class="p">,</span> <span class="n">cols_to_pass_idx</span><span class="p">),</span> 
+<span class="p">])</span>
+
+<span class="c1"># for tree-based models, also want to pass through numeric columns</span>
+<span class="n">preproc_pass_num</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">(</span><span class="n">transformers</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;as_is&#39;</span><span class="p">,</span> <span class="s1">&#39;passthrough&#39;</span><span class="p">,</span> <span class="n">cols_to_scale_idx</span><span class="p">),</span> 
+<span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Engineered Features</strong></p>
+<p>While creating engineered features based on mathematical combinations of other columns could be done directly on the dataframe, I am in the habit of splitting off my test set immediately, and the decision to engineer features often comes after EDA (exploratory data analysis). Thus, I wanted to include feature engineering in my pipeline, so my test set (and any new data) could be transformed as part of the same preprocessing pipeline.</p>
+<p>I define custom classes to perform these transformations: an average and a ratio. There is the possibility that in my ratio calculation the denominator is 0, meaning the ratio is undefined. I use <code>fillna(0)</code> to combat this. You'll notice that I essentially compute the average twice: once in the <em>TargetActivityAvg</em> class transform, and again in the <em>AssayRatio</em> class transform. Try as I might, I couldn't contrive a pipeline that would enable me to pass both the calculated average and the existing dataframe column <em>num_assays</em> required for the ratio calculation. As the average calculation is simple enough, I repeat it. But a smarter person can probably figure out a way not to.</p>
+<p>Note these transformers take the entire dataframe as input and return a single pandas Series as output. This needs to be converted to a numpy array before combing back together with the rest of the transformed features, hence the usage of the simple function <em>reshaper</em> and <code>FunctionTransformer</code>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># define custom classes &amp; function</span>
+<span class="k">class</span> <span class="nc">TargetActivityAvg</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Returns average of num_activities &amp; num_targets columns.&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="s1">&#39;num_activities&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">X</span><span class="p">[</span><span class="s1">&#39;num_targets&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+
+
+<span class="k">class</span> <span class="nc">AssayRatio</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Returns ratio of num_assays / avg(num_targets &amp; num_activities).&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
+        <span class="n">avg</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="s1">&#39;num_activities&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">X</span><span class="p">[</span><span class="s1">&#39;num_targets&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">ratio</span> <span class="o">=</span>  <span class="n">X</span><span class="p">[</span><span class="s1">&#39;num_assays&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">avg</span>
+        <span class="n">ratio</span> <span class="o">=</span> <span class="n">ratio</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ratio</span>
+
+<span class="k">def</span> <span class="nf">reshaper</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">X</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># define feature engineering preprocessors</span>
+<span class="n">feat_eng1</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">TargetActivityAvg</span><span class="p">()),</span>
+    <span class="p">(</span><span class="s1">&#39;reshape&#39;</span><span class="p">,</span> <span class="n">FunctionTransformer</span><span class="p">(</span><span class="n">reshaper</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="p">])</span>
+
+<span class="n">feat_eng2</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">&#39;ratio&#39;</span><span class="p">,</span>  <span class="n">AssayRatio</span><span class="p">()),</span>
+        <span class="p">(</span><span class="s1">&#39;reshape&#39;</span><span class="p">,</span> <span class="n">FunctionTransformer</span><span class="p">(</span><span class="n">reshaper</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
+        <span class="p">])</span>
+
+<span class="c1"># combine them into one preprocessor</span>
+<span class="n">preproc_feat_eng</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;feat_eng&#39;</span><span class="p">,</span> <span class="n">FeatureUnion</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">feat_eng1</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ratio&#39;</span><span class="p">,</span> <span class="n">feat_eng2</span><span class="p">)</span>
+    <span class="p">]))</span>
+<span class="p">])</span>
+
+<span class="c1"># need to scale these engineered features for Logistic Regression</span>
+<span class="n">preproc_feat_eng_scaled</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;feat_eng&#39;</span><span class="p">,</span> <span class="n">FeatureUnion</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">feat_eng1</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ratio&#39;</span><span class="p">,</span> <span class="n">feat_eng2</span><span class="p">)</span>
+    <span class="p">])),</span>
+    <span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="n">StandardScaler</span><span class="p">())</span>
+<span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Putting-them-all-together">Putting them all together<a class="anchor-link" href="#Putting-them-all-together">&#182;</a></h3><p>The final step is to combine the various preprocessors together into a single pipeline. Because the transformer steps were defined separately, they can be combined together in different ways, depending on the downstram application (model).</p>
+<p><strong>Scaling</strong>: This pipeline scales the numerical features, e.g. for Logistic Regression.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pipe_with_scale</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">FeatureUnion</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">&#39;cvs&#39;</span><span class="p">,</span> <span class="n">preproc_cv</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;feat_eng&#39;</span><span class="p">,</span> <span class="n">preproc_feat_eng_scaled</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ohe&#39;</span><span class="p">,</span> <span class="n">preproc_ohe</span><span class="p">),</span> 
+        <span class="p">(</span><span class="s1">&#39;pass&#39;</span><span class="p">,</span> <span class="n">preproc_pass</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;num&#39;</span><span class="p">,</span> <span class="n">preproc_scale</span><span class="p">),</span>
+    <span class="p">])</span>
+    <span class="p">)</span>
+<span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>Categorical only</strong>: This pipeline is for models that don't require scaling, e.g. Gradient Boosting Decision Trees.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pipe_cat_only</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">FeatureUnion</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">&#39;cvs&#39;</span><span class="p">,</span> <span class="n">preproc_cv</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;feat_eng&#39;</span><span class="p">,</span> <span class="n">preproc_feat_eng</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;ohe&#39;</span><span class="p">,</span> <span class="n">preproc_ohe</span><span class="p">),</span> 
+        <span class="p">(</span><span class="s1">&#39;pass&#39;</span><span class="p">,</span> <span class="n">preproc_pass</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;num&#39;</span><span class="p">,</span> <span class="n">preproc_pass_num</span><span class="p">)</span>
+    <span class="p">])</span>
+    <span class="p">)</span>
+<span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>CatBoost</strong>: As described above, CatBoost has different preprocessing needs (no One-Hot Encoding). The last bit of code below gives the columns indices for the categorical features, which need to be provided to the CatBoost algorithm. Note that I had to determine these by hand -- I couldn't figure out a way to do it automatically.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># define columns that do not require any preprocessing</span>
+<span class="n">other_cb_features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mw_freebase&#39;</span><span class="p">,</span> <span class="s1">&#39;alogp&#39;</span><span class="p">,</span> <span class="s1">&#39;acd_logp&#39;</span><span class="p">,</span> <span class="s1">&#39;acd_logd&#39;</span><span class="p">,</span> <span class="s1">&#39;hba&#39;</span><span class="p">,</span> <span class="s1">&#39;hbd&#39;</span><span class="p">,</span> <span class="s1">&#39;psa&#39;</span><span class="p">,</span> <span class="s1">&#39;rtb&#39;</span><span class="p">,</span> <span class="s1">&#39;ro3_pass&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;num_ro5_violations&#39;</span><span class="p">,</span> <span class="s1">&#39;molecular_species&#39;</span><span class="p">,</span> <span class="s1">&#39;aromatic_rings&#39;</span><span class="p">,</span> <span class="s1">&#39;heavy_atoms&#39;</span><span class="p">,</span> <span class="s1">&#39;qed_weighted&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;hba_lipinski&#39;</span><span class="p">,</span> <span class="s1">&#39;hbd_lipinski&#39;</span><span class="p">,</span> <span class="s1">&#39;research_co&#39;</span><span class="p">,</span> <span class="s1">&#39;num_target_organisms&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;human_target&#39;</span><span class="p">,</span> <span class="s1">&#39;num_target_organisms&#39;</span><span class="p">,</span> <span class="s1">&#39;num_alerts_set1&#39;</span><span class="p">]</span>
+<span class="n">other_cb_feat_idx</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">other_cb_features</span><span class="p">]</span>
+
+<span class="c1"># create a transformer to pass them through</span>
+<span class="n">preproc_pass_cb</span> <span class="o">=</span> <span class="n">ColumnTransformer</span><span class="p">(</span><span class="n">transformers</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;as_is&#39;</span><span class="p">,</span> <span class="s1">&#39;passthrough&#39;</span><span class="p">,</span> <span class="n">other_cb_feat_idx</span><span class="p">),</span> 
+<span class="p">])</span>
+
+<span class="c1"># full pipeline</span>
+<span class="n">pipe_cat_boost</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
+    <span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">FeatureUnion</span><span class="p">([</span>
+        <span class="p">(</span><span class="s1">&#39;cvs&#39;</span><span class="p">,</span> <span class="n">preproc_cv</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;feat_eng&#39;</span><span class="p">,</span> <span class="n">preproc_feat_eng</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;pass&#39;</span><span class="p">,</span> <span class="n">preproc_pass_cb</span><span class="p">)</span>
+    <span class="p">])</span>
+    <span class="p">)</span>
+<span class="p">])</span>
+
+<span class="c1"># where the &quot;categorical&quot; columns end up after the above pre-processing</span>
+<span class="n">cab_cat_feats</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ro3_pass&#39;</span><span class="p">,</span> <span class="s1">&#39;molecular_species&#39;</span><span class="p">,</span> <span class="s1">&#39;research_co&#39;</span><span class="p">,</span> <span class="s1">&#39;human_target&#39;</span><span class="p">]</span>
+<span class="n">cb_cat_cols</span> <span class="o">=</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Pipeline-in-action">Pipeline in action<a class="anchor-link" href="#Pipeline-in-action">&#182;</a></h3><p>Here is a brief example of how to use one of the preprocessors (<em>pipe_with_scale</em>) in combination with a model:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">log_reg_pipe</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">pipe_with_scale</span><span class="p">,</span> <span class="n">LogisticRegression</span><span class="p">())</span>
+<span class="n">log_reg_pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">log_reg_pipe</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Aside:-Extracting-feature-names">Aside: Extracting feature names<a class="anchor-link" href="#Aside:-Extracting-feature-names">&#182;</a></h3><p>Often, after fitting your model, you want to extract feature importances. Which features are impacting your model greatly? Which have little to no impact (and thus could be dropped)? The below code keeps track of and extracts the final order of features in the various pipelines.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preproc_assay</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">feat_cv_asy</span> <span class="o">=</span> <span class="n">preproc_assay</span><span class="o">.</span><span class="n">named_transformers_</span><span class="p">[</span><span class="s1">&#39;assay_cv&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
+
+<span class="n">preproc_target</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">feat_cv_trg</span> <span class="o">=</span> <span class="n">preproc_target</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">&#39;target_cv&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
+
+<span class="n">feat_cv_asy</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;assay_class_&#39;</span> <span class="o">+</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">feat_cv_asy</span><span class="p">]</span>
+<span class="n">feat_cv_trg</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;target_class_&#39;</span> <span class="o">+</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">feat_cv_trg</span><span class="p">]</span>
+
+<span class="n">preproc_ohe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+<span class="n">feat_ohe</span> <span class="o">=</span> <span class="n">preproc_ohe</span><span class="o">.</span><span class="n">named_transformers_</span><span class="p">[</span><span class="s1">&#39;cat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">()</span>
+<span class="n">feat_ohe</span> <span class="o">=</span> <span class="n">feat_ohe</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">feat_num</span> <span class="o">=</span> <span class="n">cols_to_scale</span>
+
+<span class="n">feat_pass</span> <span class="o">=</span> <span class="n">cols_to_pass</span>
+
+<span class="n">feat_fe</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;avg_num_targ_act&#39;</span><span class="p">,</span> <span class="s1">&#39;ratio_assay_avg_targ_act&#39;</span><span class="p">]</span>
+
+<span class="c1"># Feature names for pipe_cat_only &amp; pipe_with_scale</span>
+<span class="n">feat_names</span> <span class="o">=</span> <span class="n">feat_cv_asy</span> <span class="o">+</span> <span class="n">feat_cv_trg</span> <span class="o">+</span> <span class="n">feat_fe</span> <span class="o">+</span> <span class="n">feat_ohe</span> <span class="o">+</span> <span class="n">feat_pass</span> <span class="o">+</span> <span class="n">feat_num</span>
+
+<span class="c1"># for pipe_cat_boost:</span>
+<span class="n">feat_other_cb</span> <span class="o">=</span> <span class="n">other_cb_features</span>
+<span class="n">feat_names_cb</span> <span class="o">=</span> <span class="n">feat_cv_asy</span> <span class="o">+</span> <span class="n">feat_cv_trg</span> <span class="o">+</span> <span class="n">feat_fe</span> <span class="o">+</span> <span class="n">feat_other_cb</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Summary">Summary<a class="anchor-link" href="#Summary">&#182;</a></h3><p>In summary, we've created 3 different pipelines, built the same "units" or base transformers. Creating small units separately and subsequently combining them in different ways allows for flexibility and efficiency. Defining custom transformer classes and functions expands the functionality of scikit-learn's builtin capabilities. <code>ColumnTransformer</code>, <code>FeatureUnion</code>, <code>FunctionTransformer</code>, and of course, <code>Pipeline</code> are powerful tools in developing custom preprocessors.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Footnotes:">Footnotes:<a class="anchor-link" href="#Footnotes:">&#182;</a></h4><ol>
+<li><a id='footnote-01'></a>Apparently, and I was unaware of this before I began writing this blog post, certain Logistic Regression solvers are robust to unscaled data, including the one I used ('liblinear'). See the summary table at <a href="https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression">https://scikit-learn.org/stable/modules/linear_model.html#logistic-regression</a></li>
+</ol>
+
+</div>
+</div>
+</div>
+ 
+
+
+<script type="text/javascript">if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var mathjaxscript = document.createElement('script');
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = '//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: 'center'," +
+        "    displayIndent: '0em'," +
+        "    showMathMenu: true," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['$','$'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        " linebreaks: { automatic: true, width: '95% container' }, " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'black ! important'} }" +
+        "    } " +
+        "}); ";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+</script>
+
+    </article>
+
+        <div class="tags">
+            <p>tags: <a href="https://kbfreder.github.io/tag/tips-tricks.html">tips &amp; tricks</a>, <a href="https://kbfreder.github.io/tag/scikit-learn.html">scikit-learn</a>, <a href="https://kbfreder.github.io/tag/pipelines.html">pipelines</a></p>
+        </div>
+
+    <hr>
+
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                            <li>
+                                <a href="https://github.com/kbfreder">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://linkedin.com/in/kbfreder">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                    </ul>
+<p class="copyright text-muted">
+    Blog powered by <a href="http://getpelican.com">Pelican</a>,
+    which takes great advantage of <a href="http://python.org">Python</a>. <br />        &copy;  Kendra Frederick
+</p>                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="https://kbfreder.github.io/theme/js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="https://kbfreder.github.io/theme/js/bootstrap.min.js"></script>
+
+        <!-- Custom Theme JavaScript -->
+        <script src="https://kbfreder.github.io/theme/js/clean-blog.min.js"></script>
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-126640488-1', 'auto');
+    ga('send', 'pageview');
+</script>
+</body>
+
+</html>
