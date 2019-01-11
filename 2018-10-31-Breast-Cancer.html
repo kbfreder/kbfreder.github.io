@@ -32,12 +32,12 @@
 <!-- End Google Analytics -->
 
 <meta name="author" content="Kendra Frederick" />
-<meta name="description" content="Predicting 5-year survival in breast cancer patients using machine learning classification methods" />
-<meta name="keywords" content="Metis, classification, flask">
+<meta name="description" content="Predicting 5-year survival in breast cancer patients" />
+<meta name="keywords" content="Metis, classification, Flask">
 
 <meta property="og:site_name" content="Data Science: A Scenic Date"/>
-<meta property="og:title" content="Predicting 5-Year Breast Cancer Survival"/>
-<meta property="og:description" content="Predicting 5-year survival in breast cancer patients using machine learning classification methods"/>
+<meta property="og:title" content="Breast Cancer Survival"/>
+<meta property="og:description" content="Predicting 5-year survival in breast cancer patients"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:url" content="https://kbfreder.github.io/2018-10-31-Breast-Cancer.html"/>
 <meta property="og:type" content="article"/>
@@ -47,21 +47,21 @@
 <meta property="article:section" content="projects"/>
 <meta property="article:tag" content="Metis"/>
 <meta property="article:tag" content="classification"/>
-<meta property="article:tag" content="flask"/>
+<meta property="article:tag" content="Flask"/>
 <meta property="og:image" content="https://kbfreder.github.io/images/profile.png">
 
-  <title>Data Science: A Scenic Date &ndash; Predicting 5-Year Breast Cancer Survival</title>
+  <title>Data Science: A Scenic Date &ndash; Breast Cancer Survival</title>
 
 </head>
 <body>
   <aside>
     <div>
       <a href="https://kbfreder.github.io">
-        <img src="https://kbfreder.github.io/images/profile.png" alt="Kendra Frederick" title="Kendra Frederick">
+        <img src="https://kbfreder.github.io/images/profile.png" alt="A Scenic Date" title="A Scenic Date">
       </a>
-      <h1><a href="https://kbfreder.github.io">Kendra Frederick</a></h1>
+      <h1><a href="https://kbfreder.github.io">A Scenic Date</a></h1>
 
-<p>Data Scientist</p>
+<p>Kendra Frederick's Data Science Blog</p>
       <nav>
         <ul class="list">
           <li><a href="https://kbfreder.github.io/pages/about.html#about">About Me</a></li>
@@ -86,6 +86,7 @@
 
       <a href="/categories.html">Categories</a>
       <a href="/tags.html">Tags</a>
+      <a href="/pages/about.html#about">About Me</a>
 
 
     </nav>
@@ -93,7 +94,7 @@
 <article class="single">
   <header>
       
-    <h1 id="2018-10-31-Breast-Cancer">Predicting 5-Year Breast Cancer Survival</h1>
+    <h1 id="2018-10-31-Breast-Cancer">Breast Cancer Survival</h1>
     <p>
           Posted on Wed 31 October 2018 in <a href="https://kbfreder.github.io/category/projects.html">projects</a>
 
@@ -1424,7 +1425,7 @@ and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-samp
         <span class="n">y_proba</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="n">test</span><span class="p">])[:,</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">test</span><span class="p">],</span> <span class="n">y_proba</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scores</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -1443,7 +1444,7 @@ and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-samp
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/cm_heatmap.png" alt="Confusion Matrix" width="400" align=“center”/></p>
+<p><img src="/images/cm_heatmap.png" alt="Confusion Matrix" width="400" align=“center”/></p>
 
 </div>
 </div>
@@ -1458,6 +1459,10 @@ and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-samp
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><strong>Statistic</strong></td>
+<td><strong>Value</strong></td>
+</tr>
 <tr>
 <td>Precision</td>
 <td>0.86</td>
@@ -1492,7 +1497,7 @@ and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-samp
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Inspecting the feature importances, we see, perhaps unsuprisingly, that age is the most important, followed by tumor size, the number of positive nodes, and stage.</p>
-<p><img src="images/feature_importance.png" alt="Feature Importances" width="500" align=“center”/></p>
+<p><img src="/images/feature_importance.png" alt="Feature Importances" width="500" align=“center”/></p>
 
 </div>
 </div>
@@ -1518,7 +1523,7 @@ and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-samp
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Code">Code<a class="anchor-link" href="#Code">&#182;</a></h3><p>You can find the code for this project here.</p>
+<h3 id="Code">Code<a class="anchor-link" href="#Code">&#182;</a></h3><p>You can find the code for this project <a href="https://github.com/kbfreder/breast-cancer">here</a>.</p>
 
 </div>
 </div>
@@ -1560,7 +1565,7 @@ and 3), Neighborhood Cleaning Rule, One Sided Selection, Tomek Links (Under-samp
     <p>
       <a href="https://kbfreder.github.io/tag/metis.html">Metis</a>
       <a href="https://kbfreder.github.io/tag/classification.html">classification</a>
-      <a href="https://kbfreder.github.io/tag/flask.html">flask</a>
+      <a href="https://kbfreder.github.io/tag/flask.html">Flask</a>
     </p>
   </div>
 

@@ -33,10 +33,10 @@
 
 <meta name="author" content="Kendra Frederick" />
 <meta name="description" content="Predicting FDA approval of small molecule drugs" />
-<meta name="keywords" content="Metis, SQL, CatBoost, drug discovery, classification">
+<meta name="keywords" content="Metis, SQL, CatBoost, drug discovery, classification, plotly">
 
 <meta property="og:site_name" content="Data Science: A Scenic Date"/>
-<meta property="og:title" content="First Post"/>
+<meta property="og:title" content="Small Molecule Drugs"/>
 <meta property="og:description" content="Predicting FDA approval of small molecule drugs"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:url" content="https://kbfreder.github.io/2018-12-12-Small-Molecules.html"/>
@@ -50,20 +50,21 @@
 <meta property="article:tag" content="CatBoost"/>
 <meta property="article:tag" content="drug discovery"/>
 <meta property="article:tag" content="classification"/>
+<meta property="article:tag" content="plotly"/>
 <meta property="og:image" content="https://kbfreder.github.io/images/profile.png">
 
-  <title>Data Science: A Scenic Date &ndash; First Post</title>
+  <title>Data Science: A Scenic Date &ndash; Small Molecule Drugs</title>
 
 </head>
 <body>
   <aside>
     <div>
       <a href="https://kbfreder.github.io">
-        <img src="https://kbfreder.github.io/images/profile.png" alt="Kendra Frederick" title="Kendra Frederick">
+        <img src="https://kbfreder.github.io/images/profile.png" alt="A Scenic Date" title="A Scenic Date">
       </a>
-      <h1><a href="https://kbfreder.github.io">Kendra Frederick</a></h1>
+      <h1><a href="https://kbfreder.github.io">A Scenic Date</a></h1>
 
-<p>Data Scientist</p>
+<p>Kendra Frederick's Data Science Blog</p>
       <nav>
         <ul class="list">
           <li><a href="https://kbfreder.github.io/pages/about.html#about">About Me</a></li>
@@ -88,6 +89,7 @@
 
       <a href="/categories.html">Categories</a>
       <a href="/tags.html">Tags</a>
+      <a href="/pages/about.html#about">About Me</a>
 
 
     </nav>
@@ -95,7 +97,7 @@
 <article class="single">
   <header>
       
-    <h1 id="2018-12-12-Small-Molecules">First Post</h1>
+    <h1 id="2018-12-12-Small-Molecules">Small Molecule Drugs</h1>
     <p>
           Posted on Wed 12 December 2018 in <a href="https://kbfreder.github.io/category/projects.html">projects</a>
 
@@ -1264,7 +1266,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Background">Background<a class="anchor-link" href="#Background">&#182;</a></h3><p>The drug development process is a high-risk, long-term and expensive endeavor. On average, tens of thousands of drug candidates enter the drug discovery pipeline for every one becomes FDA-approved. In addition to this high attrition, this process takes 10 years and is <a href="https://www.liaison.com/blog/2017/05/02/cost-drug-development/">estimated</a> to cost $1.4 billion. Machine Learning could help reduce the risk, thereby lowering costs and expediting the process.</p>
+<h3 id="Background">Background<a class="anchor-link" href="#Background">&#182;</a></h3><p>The drug development process is a high-risk, long-term, and expensive endeavor. On average, tens of thousands of candidates enter the drug discovery pipeline for every one that becomes FDA-approved. In addition to this high attrition, the process takes 10 years and is <a href="https://www.liaison.com/blog/2017/05/02/cost-drug-development/" target="_blank">estimated</a> to cost $1.4 billion. Machine Learning could help reduce the risk, thereby lowering costs and expediting the process.</p>
 
 </div>
 </div>
@@ -1272,7 +1274,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/funnel09.png" alt="Drug Discovery Process" width="800" align=“center”/></p>
+<p><img src="/images/funnel09.png" alt="Drug Discovery Process" width="800" align=“center”/></p>
 
 </div>
 </div>
@@ -1280,7 +1282,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Data">Data<a class="anchor-link" href="#Data">&#182;</a></h3><p>My data source was <a href="https://www.ebi.ac.uk/chembl/">ChEMBL</a>: a chemical database curated by the European Molecular Biology Laboratory. It was hosted on Google BigQuery and was also available for download as a PostgreSQL database. It contains information on over 1 million drug-like molecules in 77 tables. I decided to focus on small molecules. After cleaning the data and excluding any entries from the past 10 years, I was left with 432,000 entries. My dataset was highly imbalanced, as only 0.4% of these small molecules attained FDA approval.</p>
+<h3 id="Data">Data<a class="anchor-link" href="#Data">&#182;</a></h3><p>My data source was <a href="https://www.ebi.ac.uk/chembl/" target="_blank">ChEMBL</a>, a chemical database curated by the European Molecular Biology Laboratory. It was hosted on Google BigQuery and was also available for download as a PostgreSQL database. It contains information on over 1 million drug-like molecules in 77 tables. I decided to focus on small molecules. After cleaning the data and excluding any entries from the past 10 years, I was left with 432,000 entries. My dataset was highly imbalanced, as only 0.4% of these small molecules attained FDA approval.</p>
 
 </div>
 </div>
@@ -1299,8 +1301,12 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/targets_before_after_CV.png" alt="CountVectorize" width="800" align=“left”/></p>
-
+<div align="center">
+<figure>
+    <img src="/images/targets_before_after_CV.png" alt="CountVectorize" width="800" align=“left”/>
+    <figcaption>Count-Vectorizing target classes</figcaption>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -1334,6 +1340,11 @@ h6:hover .anchor-link {
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><strong>Hyperparameter</strong></td>
+<td><strong>Tuned Value</strong></td>
+<td><strong>Default</strong> </td>
+</tr>
 <tr>
 <td>Tree Depth</td>
 <td>7</td>
@@ -1375,7 +1386,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The F1-score  for my training and test sets were as follows. The training score is from the <code>BayesSearchCV</code> hyper-tuning, which used 5-fold stratified cross-validation.</p>
+<p>The F1-score for my training and test (hold-out) sets is given in the table below; the Precision-Recall curve for the test set is shown below. The training score is from the <code>BayesSearchCV</code> hyper-tuning, which used 5-fold stratified cross-validation.</p>
 <table>
 <thead><tr>
 <th>Dataset</th>
@@ -1383,6 +1394,10 @@ h6:hover .anchor-link {
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><strong>Dataset</strong></td>
+<td><strong>F1-score</strong></td>
+</tr>
 <tr>
 <td>Train</td>
 <td>0.575</td>
@@ -1402,7 +1417,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/PR_CostFunction.png" alt="Cost Function" width="800" align=“left”/></p>
+<p><img src="/images/PR_CostFunction.png" alt="Cost Function" width="800" align=“center”/></p>
 
 </div>
 </div>
@@ -1410,7 +1425,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>The most logical way in which to apply my model to the drug discovery process is early in the pipeline. This is essentially where the model was trained: on thousands of compounds, most of which never see the light of day. Using the model here, it could reduce the number of compounds under consideration at this stage, thereby expediting the screening process and reducing testing costs. It would furthermore increase our confidence in the molecules sent forward in the pipeline to Pre-Clinical testing. I estimate this could save 6-12 months and up to $\$$100 million.</p>
+<p>The most logical way in which to apply my model to the drug discovery process is in the early phases. This is essentially where the model was trained: on thousands of compounds, most of which never see the light of day. Using the model here, it could reduce the number of compounds under consideration at this stage, thereby expediting the screening process and reducing testing costs. It would furthermore increase our confidence in the molecules sent forward in the pipeline to Pre-Clinical testing. I estimate this could save 6-12 months and up to $\$$100 million.</p>
 
 </div>
 </div>
@@ -1418,7 +1433,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><img src="images/ModelSavings.png" alt="Cost Function" width="600" align=“left”/></p>
+<p><img src="/images/ModelSavings.png" alt="Applying Model Leads to Savings" width="600" align=“center”/></p>
 
 </div>
 </div>
@@ -1426,7 +1441,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>1 year and $\$$100 million might seem paltry in the face of 10 years and $\$$1.4 billion but it’s a good first step towards reducing the time, expesne, and involved in bringing a new drug to market.</p>
+<p>1 year and $\$$100 million might seem paltry in the face of 10 years and $\$$1.4 billion but it’s a good first step towards reducing the time, expesne, and risk involved in bringing a new drug to market.</p>
 
 </div>
 </div>
@@ -1434,14 +1449,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Future-Work">Future Work<a class="anchor-link" href="#Future-Work">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Include more bioactivity data</strong> I had grand visisons of ranking molecules according to their actvitiy; using NLP (natural language processing) to extract information from the assay descriptions; even creating a "Recommender System" for small molecules &amp; their targets (think of the small molecules as the 'users' and the targets as the 'items')...alas, time is finite.</p>
+<h3 id="Future-Work">Future Work<a class="anchor-link" href="#Future-Work">&#182;</a></h3><p><strong>Include more bioactivity data</strong> I had grand visisons of ranking molecules according to their actvitiy; using NLP (natural language processing) to extract information from the assay descriptions; even creating a "Recommender System" for small molecules &amp; their targets (think of the small molecules as the 'users' and the targets as the 'items')...alas, time is finite.</p>
 <p><strong>Expand to Biologics</strong> Biologics are protein or protein fragment drugs. They are vastly more complex molecules than the small ones I examnined here, making their analysis more complicated. They are also where much of the innovation in drug discovery is occuring, so they are a worthwhile challenge to take on.</p>
 
 </div>
@@ -1450,14 +1458,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Code">Code<a class="anchor-link" href="#Code">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>You can find the code for this project <a href="https://github.com/kbfreder/small-molecules">here</a>.</p>
+<h3 id="Code">Code<a class="anchor-link" href="#Code">&#182;</a></h3><p>You can find the code for this project <a href="https://github.com/kbfreder/small-molecules">here</a>.</p>
 
 </div>
 </div>
@@ -1502,6 +1503,7 @@ h6:hover .anchor-link {
       <a href="https://kbfreder.github.io/tag/catboost.html">CatBoost</a>
       <a href="https://kbfreder.github.io/tag/drug-discovery.html">drug discovery</a>
       <a href="https://kbfreder.github.io/tag/classification.html">classification</a>
+      <a href="https://kbfreder.github.io/tag/plotly.html">plotly</a>
     </p>
   </div>
 

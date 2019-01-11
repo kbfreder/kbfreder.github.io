@@ -33,7 +33,7 @@
 
 <meta name="author" content="Kendra Frederick" />
 <meta name="description" content="Exploring Rap &amp; Country music lyrics" />
-<meta name="keywords" content="Metis, NLP, LDA, unsupervised learning">
+<meta name="keywords" content="Metis, NLP, LDA, unsupervised learning, Flask">
 
 <meta property="og:site_name" content="Data Science: A Scenic Date"/>
 <meta property="og:title" content="Gangsta Score"/>
@@ -49,6 +49,7 @@
 <meta property="article:tag" content="NLP"/>
 <meta property="article:tag" content="LDA"/>
 <meta property="article:tag" content="unsupervised learning"/>
+<meta property="article:tag" content="Flask"/>
 <meta property="og:image" content="https://kbfreder.github.io/images/profile.png">
 
   <title>Data Science: A Scenic Date &ndash; Gangsta Score</title>
@@ -58,11 +59,11 @@
   <aside>
     <div>
       <a href="https://kbfreder.github.io">
-        <img src="https://kbfreder.github.io/images/profile.png" alt="Kendra Frederick" title="Kendra Frederick">
+        <img src="https://kbfreder.github.io/images/profile.png" alt="A Scenic Date" title="A Scenic Date">
       </a>
-      <h1><a href="https://kbfreder.github.io">Kendra Frederick</a></h1>
+      <h1><a href="https://kbfreder.github.io">A Scenic Date</a></h1>
 
-<p>Data Scientist</p>
+<p>Kendra Frederick's Data Science Blog</p>
       <nav>
         <ul class="list">
           <li><a href="https://kbfreder.github.io/pages/about.html#about">About Me</a></li>
@@ -87,6 +88,7 @@
 
       <a href="/categories.html">Categories</a>
       <a href="/tags.html">Tags</a>
+      <a href="/pages/about.html#about">About Me</a>
 
 
     </nav>
@@ -1270,7 +1272,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>For the fourth project ("Project Fletcher") of Metis' Data Science bootcamp, which tasked us with using NLP and unsupervised learning, I chose to explore the language-space of two music genres that seem diametrically opposed: Rap and Country. Can we identify features that distinguish or define them? Also, given the seemingly unbreachable cultural chasm between the audiences that listen to these music genres, any similarities we find between them could serve as a common ground.</p>
+<p>For the fourth project ("Project Fletcher") of Metis' Data Science bootcamp, which tasked us with using NLP and unsupervised learning, I chose to explore the language-space of two musical genres that seem diametrically opposed: Rap and Country. Can we identify features that distinguish or define them? Also, given the seemingly unbreachable cultural chasm between the audiences of these genres, any similarities we find between them could serve as a common ground.</p>
 
 </div>
 </div>
@@ -1293,6 +1295,8 @@ h6:hover .anchor-link {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="Data-&amp;-Methods">Data &amp; Methods<a class="anchor-link" href="#Data-&amp;-Methods">&#182;</a></h3><p>I leveraged Billboard.com’s weekly listing of top 20 songs to guide which songs to scrape lyrics for. <a href="www.genius.com">Genius.com</a> has an API and is a reknown source for rap lyrics, so it served as my lyrics source. I obtained lyrics for over 2700 songs dating back to 2008. While not a particularly large dataset, it was sufficient for a proof of concept approach.</p>
+<p>I performed basic text cleaning, removing punctuation and <code>nltk</code>’s built-in English and Spanish stop-words. I also added additional song-related stop-words such as “yeah” and “oo”. I removed any words between brackets, as lyrics commonly contain bracketed words to denote different parts of songs (e.g. [Chorus]) or featured artists (e.g. [Pitbull]). (See <a href='#Footnote1'>Footnote 1</a>.)</p>
+<p>I split the songs into 1- and 2-word "tokens" and calculated the frequency of these terms in my corpus. (See <a href='#Footnote2'>Footnote 2</a>.) From these term frequencies, I constructed a 'document-term-matrix' (DTM): each row is a song, and each column represents a word token. My DTM contained nearly 45,000 features or columns. With only 2700 songs, most values in this matrix will be null. A sparse matrix such as this is nearly ubiquitous in natural language processing (NLP).</p>
 
 </div>
 </div>
@@ -1300,18 +1304,9 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>I performed basic text cleaning, removing punctuation and <code>nltk</code>’s built-in English and Spanish stop-words. I also added additional song-related stop-words such as “yeah” and “oo”. I removed any words between brackets, as lyrics commonly contain bracketed words to denote different parts of songs (e.g. [Chorus]) or featured artists (e.g. [Pitbull]). (See Footnote 1)</p>
-<p>I split the songs into 1- and 2-word "tokens" and calculated the frequency of these terms in my corpus. (See Footnote 2.) From these term frequencies, I constructed a 'document-term-matrix': each row is a document, and each column represents a token. My DTM contained nearly 45,000 features or columns. With only 2700 songs, most values in this matrix will be null. A sparse matrix such as this is nearly ubiquitous in natural language processing (NLP).</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Topic-Modeling-with-LDA">Topic Modeling with LDA<a class="anchor-link" href="#Topic-Modeling-with-LDA">&#182;</a></h4><p>In NLP, Topic Modeling is a statistical method for discovering the collection of topics a corpus of documents contain. Latent Dirichlet Allocation (LDA) is one such topic modeling approach in common use today. In LDA, documents are thought to be generated from mixtures of topics, which themselves have distributions of word probabilities. The topic distributions within a document are sparse Dirichlet prior distributions, which result in the documents covering a small set of topics, and topics containing a small set of words; this aligns with intuition.</p>
+<h4 id="Topic-Modeling-with-LDA">Topic Modeling with LDA<a class="anchor-link" href="#Topic-Modeling-with-LDA">&#182;</a></h4><p>In NLP, Topic Modeling is a statistical method for discovering the collection of topics a corpus of documents contains. Latent Dirichlet Allocation (LDA) is one such topic modeling approach in common use today. In LDA, documents are generated from mixtures of topics, which themselves have distributions of word probabilities. The topic distributions within a document have sparse Dirichlet prior distributions, which result in the documents covering a small set of topics, and topics containing a small set of words; this aligns with intuition.</p>
 <p><a href="https://github.com/bmabey/pyLDAvis">pyLDAvis</a> is a handy library that enables interactive visualization of topic modeling. Here are the results from my 9-topic modeling of the Rap &amp; Country music song corpus:</p>
-<p><img src="images/topic_modeling.png" alt="LDA Visualization" width="500" align=“center”/></p>
+<p><img src="/images/topic_modeling.png" alt="LDA Visualization" width="500" align=“center”/></p>
 
 </div>
 </div>
@@ -1319,31 +1314,10 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We can see that there are two "main" topics. Examining the most common words in each of these topics, we see that one topic appears to be "Country" and the other "Rap". (Note that the Rap topic contains several offensive words, which have been edited for propriety.)</p>
-<p><img src="images/topic_words.png" alt="Topic Words" width="200" align=“center”/></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h3><p>We can see that there are two "main" topics. Examining the most common words in each of these topics, we see that one topic appears to be "Country" and the other "Rap". (Note that the Rap topic contains several offensive words, which have been edited for propriety.)</p>
+<p><img src="/images/topic_words.png" alt="Topic Words" width="200" align=“center”/></p>
 <p>Given that we appear to have a 'Country' topic and a 'Rap' topic, we would expect Country songs to have a high proportion of Topic 1 and Rap songs to have a high percentage of Topic 2. This is more or less what we observe:</p>
-<p><img src="images/Topic_Importance_by_Genre_split_violin_2.png" alt="Topic Importance by genre" width="500" align="center"/></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="/images/Topic_Importance_by_Genre_split_violin_2.png" alt="Topic Importance by genre" width="500" align="center"/></p>
 <p>The above is a split violin plot. The distribution of topic importance is plotted along the vertical axis. The left half of a plot corresponds to the distribution for the Rap genre; the right half for Country. We can see that Country songs indeed are characterized by high Topic 1 importance. Rap songs actually have a broad distribution of Topic 2 importances, but nearly no Country songs feature this topic.</p>
 
 </div>
@@ -1352,52 +1326,17 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Gangsta-Score">Gangsta Score<a class="anchor-link" href="#Gangsta-Score">&#182;</a></h3>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Building on the observation that the relative importance of these two topics in a song appears to discriminate between the two genres, I engineered a feature I'm calling the “Gangsta Score":</p>
-<p><img src="images/gangsta_score.png" alt="Gangsta Score Equation" width=250 alt="center"/></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Gangsta-Score">Gangsta Score<a class="anchor-link" href="#Gangsta-Score">&#182;</a></h3><p>Building on the observation that the relative importance of these two topics in a song appears to discriminate between the two genres, I engineered a feature I call the “Gangsta Score":</p>
+<p><img src="/images/gangsta_score.png" alt="Gangsta Score Equation" width=250 alt="center"/></p>
 <p>Thus, a song high in Topic 2 (the “Rap” topic) will have a positive score. If we examine the distribution of scores by genre, we observe that rap songs tend to fall on the positive end of the Gangsta Score scale, while country songs fall on the negative end, as expected:</p>
-<p><img src="images/score_hist_overlay_2cat.png" alt="Histogram" width="450" align="center"/></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>However, each genre is multimodal, so there is clearly something more complex going on. There is also significant overlap between the two genres in the area between -3 and 0 on the Gangsta Score scale.  I decided to investigate this further</p>
-<p>As a result of assigning each song a distribution of topic importances, LDA effectively reduces the dimensionality of our sparse matrix from  2700 x 45,000 to 2700 x 9. This enables us to use these vectors to determine similarity between songs and to cluster them. I used K-Means clustering with cosine distance. Surprisingly, over 30% of rap songs were clustered with Country songs:</p>
-<p><img src="images/clusters2.png" alt="Clustering" width="400" align="center"/></p>
+<p><img src="/images/score_hist_overlay_2cat.png" alt="Histogram" width="450" align="center"/></p>
+<p>However, each genre is multimodal, so there is clearly something more complex going on. There is also significant overlap between the two genres in the area between -3 and 0 on the Gangsta Score scale.  I decided to investigate this further...</p>
+<p>As a result of assigning each song a distribution of topic importances, LDA effectively reduces the dimensionality of our sparse matrix from  2700 x 45,000 to 2700 x 9. This enables us determine similarity between songs by computing the distance between song vectors and subsequently to cluster songs according to their similarity. I used K-Means clustering with cosine distance. Surprisingly, over 30% of rap songs were clustered with Country songs:</p>
+<p><img src="/images/clusters2.png" alt="Clustering" width="400" align="center"/></p>
 <p>If we pull out Rap songs that are clustered with country songs, and re-plot the score distributions, we find that these “country-rap” songs fall in the area of overlap:</p>
-<p><img src="images/score_hist_overlay_3cat.png" alt="Histogram with Country Rap" width="450" align="center"/></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="/images/score_hist_overlay_3cat.png" alt="Histogram with Country Rap" width="450" align="center"/></p>
 <p>Examination of lyrics in various portions of the Gangsta Score scale support its utility. Rap songs at the high, positive end feature more offensive language; “country” rap songs in the area of overlap have more innocuous lyrics; Country songs close to 0 are more vulgar than those whose score is more negative. Click <a href="gangsta_score_lyrics_examples.html">here</a> for examples. (Note some lyrics are offensive in language or content.)</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>I created a <a href="Flask/templates/lyric.html">Web App</a> that allows aspiring artists to enter their lyrics, and receive a 'Gangsta Score' on them. This would enable them to tailor their lyrics to a "Rap", "Country" or cross-over audience.</p>
+<p>I created a <a href="https://gangsta-score.herokuapp.com/">Web App</a> that allows aspiring artists to enter their lyrics and receive a 'Gangsta Score'. This would enable them to tailor their lyrics to a "Rap", "Country" or cross-over audience.</p>
 
 </div>
 </div>
@@ -1406,16 +1345,9 @@ h6:hover .anchor-link {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Footnotes">Footnotes<a class="anchor-link" href="#Footnotes">&#182;</a></h4><ol>
-<li>This had the unintended side effect of removing "aside" or "echo" lyrics that occur at the end of a phrase. These were often a repetition of the preceding phrase and were far more common in rap lyrics.</li>
-<li>I found stemming and lemmitizing to give poorer results in terms of topic interpretability, as did term-frequency inverse document frequency (TF-IDF).</li>
+<li><a id='Footnote1'></a>This had the unintended side effect of removing "aside" or "echo" lyrics that occur at the end of a phrase. These were often a repetition of the preceding phrase and were far more common in rap lyrics.</li>
+<li><a id='Footnote2'></a>I found stemming and lemmitizing to give poorer results in terms of topic interpretability, as did term-frequency inverse document frequency (TF-IDF).</li>
 </ol>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 
 </div>
 </div>
@@ -1467,6 +1399,7 @@ h6:hover .anchor-link {
       <a href="https://kbfreder.github.io/tag/nlp.html">NLP</a>
       <a href="https://kbfreder.github.io/tag/lda.html">LDA</a>
       <a href="https://kbfreder.github.io/tag/unsupervised-learning.html">unsupervised learning</a>
+      <a href="https://kbfreder.github.io/tag/flask.html">Flask</a>
     </p>
   </div>
 

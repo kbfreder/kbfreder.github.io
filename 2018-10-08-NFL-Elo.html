@@ -36,7 +36,7 @@
 <meta name="keywords" content="Metis, python, regression, web scraping">
 
 <meta property="og:site_name" content="Data Science: A Scenic Date"/>
-<meta property="og:title" content="NFL Elo Ranking Predictions"/>
+<meta property="og:title" content="NFL Elo Ranking"/>
 <meta property="og:description" content="Predicting NFL Elo Rankings"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:url" content="https://kbfreder.github.io/2018-10-08-NFL-Elo.html"/>
@@ -51,18 +51,18 @@
 <meta property="article:tag" content="web scraping"/>
 <meta property="og:image" content="https://kbfreder.github.io/images/profile.png">
 
-  <title>Data Science: A Scenic Date &ndash; NFL Elo Ranking Predictions</title>
+  <title>Data Science: A Scenic Date &ndash; NFL Elo Ranking</title>
 
 </head>
 <body>
   <aside>
     <div>
       <a href="https://kbfreder.github.io">
-        <img src="https://kbfreder.github.io/images/profile.png" alt="Kendra Frederick" title="Kendra Frederick">
+        <img src="https://kbfreder.github.io/images/profile.png" alt="A Scenic Date" title="A Scenic Date">
       </a>
-      <h1><a href="https://kbfreder.github.io">Kendra Frederick</a></h1>
+      <h1><a href="https://kbfreder.github.io">A Scenic Date</a></h1>
 
-<p>Data Scientist</p>
+<p>Kendra Frederick's Data Science Blog</p>
       <nav>
         <ul class="list">
           <li><a href="https://kbfreder.github.io/pages/about.html#about">About Me</a></li>
@@ -87,6 +87,7 @@
 
       <a href="/categories.html">Categories</a>
       <a href="/tags.html">Tags</a>
+      <a href="/pages/about.html#about">About Me</a>
 
 
     </nav>
@@ -94,7 +95,7 @@
 <article class="single">
   <header>
       
-    <h1 id="2018-10-08-NFL-Elo">NFL Elo Ranking Predictions</h1>
+    <h1 id="2018-10-08-NFL-Elo">NFL Elo Ranking</h1>
     <p>
           Posted on Mon 08 October 2018 in <a href="https://kbfreder.github.io/category/projects.html">projects</a>
 
@@ -1335,6 +1336,11 @@ h6:hover .anchor-link {
 </thead>
 <tbody>
 <tr>
+<td><strong>Metric</strong></td>
+<td><strong>Train</strong></td>
+<td><strong>Test</strong> </td>
+</tr>
+<tr>
 <td><strong>R2</strong></td>
 <td>0.389</td>
 <td>0.383</td>
@@ -1351,7 +1357,7 @@ h6:hover .anchor-link {
 </tr>
 </tbody>
 </table>
-<p>While the R2 is not as high as I would have hoped, the R2 and MSE are similar between the Training and Test sets. This suggests that my model is not over-fitting and will perform similarly on data unseen. Inspection of the residuals reveals them to be normally distributed, although the tails fit less well to a normal distribution. There is also a curious void of data along the Actual $\Delta$Elo = 0 line. As ties are rare in the NFL, nearly all games result in the transfer of Elo points.</p>
+<p>While the R<sup>2</sup> is not as high as I would have hoped, it and MSE are similar between the Training and Test sets. This suggests that my model is not over-fitting and will perform similarly on data unseen. Inspection of the residuals reveals them to be normally distributed, although the tails fit less well to a normal distribution. There is also a curious void of data along the Actual $\Delta$Elo = 0 line. As ties are rare in the NFL, nearly all games result in the transfer of Elo points.</p>
 
 </div>
 </div>
@@ -1359,7 +1365,7 @@ h6:hover .anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Lessons-Learned">Lessons Learned<a class="anchor-link" href="#Lessons-Learned">&#182;</a></h3><p>In evaluating my model against the Elo ratings of FiveThirtyEight, I realized that choosing to predict Elo ratings was a complicated and fraught target. The FiveThrityEight algorithm computes the number of Elo ratings point that are exchanged between teams after a game (i.e. $\Delta$Elo) from the difference in Elo ratings between teams, adjusted for home-field advantage, and the margin of victory. I was trying to predict something ($\Delta$Elo) which was calculated using post-game knowledge (point difference) and which was dependent on this algorithm (pre-game Elo ratings). A better, more direct, target might have been point difference, using Elo ratings as variables. Anyway, when I tested my model vs. FiveThirtyEight’s algorithm, I did rather poorly. Using a Brier system for scoring probibalistic models, my forecasts would have gotten 424 points per season; FiveThrityEight averages 892 points. (See the Predictions folder in my <a href="https://github.com/kbfreder/nfl-predictions">GitHub</a>.)</p>
+<h3 id="Lessons-Learned">Lessons Learned<a class="anchor-link" href="#Lessons-Learned">&#182;</a></h3><p>In evaluating my model against the Elo ratings of FiveThirtyEight, I realized that choosing to predict Elo ratings was a complicated and fraught target. The FiveThrityEight algorithm computes the number of Elo ratings points that are exchanged between teams after a game (i.e. $\Delta$Elo) from the difference in Elo ratings between teams, adjusted for home-field advantage and the margin of victory. I was trying to predict something ($\Delta$Elo) which was calculated using post-game knowledge (point difference) and which was dependent on this algorithm (pre-game Elo ratings). A better, more direct, target might have been point difference, using Elo ratings as variables. Anyway, when I tested my model vs. FiveThirtyEight’s algorithm, I did rather poorly. Using a Brier system for scoring probibalistic models, my forecasts would have gotten 424 points per season; FiveThrityEight averages 892 points. (See the Predictions folder in my <a href="https://github.com/kbfreder/nfl-predictions">GitHub repo</a>.)</p>
 <p>I initially made an error in how I calculated $\Delta$Elo. See the accompanying blog post, <a href="2018-10-08_PandaTricks.html">Panda Tricks: self-joins</a>.</p>
 
 </div>
@@ -1369,7 +1375,7 @@ h6:hover .anchor-link {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Footnotes">Footnotes<a class="anchor-link" href="#Footnotes">&#182;</a></h4><p><a name="footnote_01"></a>1. I initally found the .js source url behind their interactive historical Elo graphics. I extracted data for one team (Green Bay, obviously), but given that FiveThirtyEight offered a neat and tidy .csv, I opted to use that rather than extract more data from the javascript file.</p>
-<p><a name="footnote_02"></a>2. Columns in final model:</p>
+<p><a name="footnote_02"></a>2. Features in final model:</p>
 <ul>
 <li>Team 1 Elo (before game)</li>
 <li>Team 2 Elo (before game)</li>
