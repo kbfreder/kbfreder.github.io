@@ -103,7 +103,7 @@ Typically, when we are done training a model, we'd evaluate it against our test 
 
 Anyway, since this information isn't provided, I decided to evaluate the model "manually". 
 
-![Fine]({static}/images/2022-06-19-Sagemaker/thanos-infinity-gauntlet.png)
+![Fine]({static}/images/2022-06-19-Sagemaker/thanos-infinity-gauntlet.gif)
 
 Thankfully, the Kaggle dataset already has the images split into Train and Test. At least *someone's* thinking about model evaluation.
 

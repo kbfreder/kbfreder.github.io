@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- #
 
+import sys
+
 AUTHOR = 'Kendra Frederick'
 SITENAME = 'Data Science: A Scenic Date'
 SITETITLE = "Kendra Frederick's Data Science Blog"
@@ -10,10 +12,10 @@ SITELOGO = SITEURL + '/images/profile.png'
 
 
 PATH = 'content'
-# THEME = 'theme/pelican-clean-blog'
-# # https://github.com/gilsondev/pelican-clean-blog
-# # CUSTOM_CSS = 'static/custom.css'
-# HEADER_COLOR = 'blue'
+THEME = '../pelican-themes/pelican-clean-blog'
+# https://github.com/gilsondev/pelican-clean-blog
+# CUSTOM_CSS = 'static/custom.css'
+HEADER_COLOR = 'blue'
 
 TIMEZONE = 'US/Aleutian'
 
@@ -51,8 +53,10 @@ RELATIVE_URLS = True
 
 
 MARKUP = ('md', 'ipynb')
-PLUGIN_PATHS = ['./plugins']
-PLUGINS = ['ipynb.markup']
+# PLUGIN_PATHS = ['./plugins']
+# PLUGINS = ['ipynb.markup']
+from pelican_jupyter import markup as nb_markup
+PLUGINS = [nb_markup]
 
 # static paths are copied without parsing their content
 STATIC_PATHS = ['images', 'static']
