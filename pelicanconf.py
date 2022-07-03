@@ -12,6 +12,8 @@ SITELOGO = SITEURL + '/images/profile.png'
 
 
 PATH = 'content'
+OUTPUT_PATH = 'docs/'
+
 THEME = '../pelican-themes/pelican-clean-blog'
 # https://github.com/gilsondev/pelican-clean-blog
 # CUSTOM_CSS = 'static/custom.css'

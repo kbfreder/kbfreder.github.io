@@ -31,7 +31,9 @@ Also, by doing this, you'll create another user profile (which shows up under 'U
 Don't make the AWS n00b mistake of not changing the Region you're navigating resources in (particularly important if your "local" region is not the default East-Coast-centric one of N. Virginia). 'Cause then you'll be confused why you can't find what you did yesterday. (Or so I hear...)
 
 ## Coming back to an existing Domain
-So, if you've already created a Domain, I think the click-path to follow from the launch page is: from the left-hand side menu, click on 'Control Panel'. Then, from the Control Panel page, under Users, next to a user, click the 'Launch App' drop down, then select 'Studio'. Launching a Studio App will redirect you to a JupyterLab server. 
+So, if you've already created a Domain, I think the click-path to follow from the launch page is: from the left-hand side menu, click on 'Control Panel' (or, less directly, 'SageMaker Dashboard', then 'Open SageMaker Domain'). Then, from the Control Panel page, under Users, next to a user, click the 'Launch App' drop down, then select 'Studio'. Launching a Studio App will redirect you to a JupyterLab server. 
+
+![SageMaker-ControlPanel-Page]({static}/images/2022-06-19-Sagemaker/sagemaker-page.png)
 
 Ignore `Control Panel / Studio' on the side menu from the main page, and the 'Apps' section on the Control Panel page, unless you want to read about them but not actually launch anything (at least not in a manner that I could ascertain.) 
 
@@ -39,8 +41,8 @@ Ignore `Control Panel / Studio' on the side menu from the main page, and the 'Ap
 
 
 **FUN FACTS**
-- There is no easy way to get back to the Studio page from the Jupyter server. So, this link will come in handy: https://console.aws.amazon.com/sagemaker/
-- If you have a notebook instance running in Studio, it won't show up under 'Notebook instances' from the main SageMaker launch page. The former is techincally on a Studio instance (EC2 / machine). (**I NEED TO CONFIMRM THIS**)
+- There is no easy way to get back to the Studio page from the Jupyter server. So, either keep this link handy: https://console.aws.amazon.com/sagemaker/, or when you navigate to the 'Control Page' page, open it in a new tab or window.
+- If you have a notebook instance running in Studio, it won't show up under 'Notebook instances' from the main SageMaker launch page. The former is techincally on a Studio instance (EC2 / machine).
 
 
 # Studio
@@ -107,16 +109,23 @@ Anyway, since this information isn't provided, I decided to evaluate the model "
 
 Thankfully, the Kaggle dataset already has the images split into Train and Test. At least *someone's* thinking about model evaluation.
 
-First, we need to launch a model endpoint, which we'll use to make inferences or predictions. It's as easy as clicking the "Deploy" button that appears when your training job is complete. I down-sized the default instance to **XXX**, to save money. Besides, the hold-out set only consisted of ~200 images. You'll need to make a note of the Endpoint name and define it in your notebook. Speaking of which, SageMaker provides a handy template for testing out your endpoint. I modified it a bit. **UPLOAD NOTEBOOK TO GITHUB?**
+First, we need to launch a model endpoint, which we'll use to make inferences or predictions. It's as easy as clicking the "Deploy" button that appears when your training job is complete. 
+
+![Deploy-Model]({static}/images/2022-06-19-Sagemaker/deploy-model.png)
+
+
+I down-sized the default instance from an ml.p2.xlarge ($1.125/hr) to an ml.m5.large ($0.23/hr) to save money. Besides, the hold-out set only consisted of ~200 images. You'll need to make a note of the Endpoint name and define it in your notebook. Speaking of which, SageMaker provides a handy template for testing out your endpoint, which [I modified it a bit](https://github.com/kbfreder/good-chip-bad-chip/blob/main/tensorflow-ic-imagenet-inception-v3-classification-4.ipynb) to suit my needs.
 
 Grabbing a random Defective and Non-Defective image, I made predictions...both were classified as Non-Defective. Hmm. I reran the code again, and two different random images were predicted correctly. Running through all images, I got:
 
-|Label|Correctly Predicted|Total|Accuracy|
+|Label|Total|Correct|Accuracy|
 |---|---|---|---|
-|Defective|66|92|71.7%|
+|Defective|92|66|71.7%|
 |Non-Defective|100|100|100%|
 
-Hmmm, we seem to be dealing with some inaccuracy in the Defective class. In my next post, I'll see if I can do better, fine-tuning the model (or a different one!) myself. Or, maybe, I'll just forge ahead with building out the pipeline. We'll see if I'm feeling more Data Science-y or Machine Learning Engineer-y...
+![Graph-of-accuracy]({static}/images/2022-06-19-Sagemaker/accuracy-graph.png)
+
+We seem to be dealing with some inaccuracy in the Defective class. In my next post, I'll see if I can do better, fine-tuning the model (or a different one!) myself. Or, maybe, I'll just forge ahead with building out the pipeline. We'll see if I'm feeling more Data Science-y or Machine Learning Engineer-y...
 
 # Cleaning up
 
