@@ -40,8 +40,10 @@ Ignore `Control Panel / Studio' on the side menu from the main page, and the 'Ap
 *Or* you can go to 'Notebook instances' and create one from there. But Studio seems to be the new product they are pushing, so if you're new, it's probably worth learning Studio. 
 
 
-**FUN FACTS**
+### FUN FACTS
+
 - There is no easy way to get back to the Studio page from the Jupyter server. So, either keep this link handy: https://console.aws.amazon.com/sagemaker/, or when you navigate to the 'Control Page' page, open it in a new tab or window.
+
 - If you have a notebook instance running in Studio, it won't show up under 'Notebook instances' from the main SageMaker launch page. The former is techincally on a Studio instance (EC2 / machine).
 
 
@@ -129,8 +131,8 @@ We seem to be dealing with some inaccuracy in the Defective class. In my next po
 
 # Cleaning up
 
-**HOT TIP**
 - To avoid incurring unexpected charges, select 'File -> Shut Down' to shut down the instance, all kernels, and images (which I haven't talked about).
+
 - **This does not shut down any endpoints you have created**. These cost you money, too! To kill them, from the main SageMaker page: 
     - Inference (from the left-hand side menu)
     - Endpoints

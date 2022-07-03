@@ -132,9 +132,15 @@
 <p><img alt="SageMaker-ControlPanel-Page" src="./images/2022-06-19-Sagemaker/sagemaker-page.png"></p>
 <p>Ignore `Control Panel / Studio' on the side menu from the main page, and the 'Apps' section on the Control Panel page, unless you want to read about them but not actually launch anything (at least not in a manner that I could ascertain.) </p>
 <p><em>Or</em> you can go to 'Notebook instances' and create one from there. But Studio seems to be the new product they are pushing, so if you're new, it's probably worth learning Studio. </p>
-<p><strong>FUN FACTS</strong>
-- There is no easy way to get back to the Studio page from the Jupyter server. So, either keep this link handy: https://console.aws.amazon.com/sagemaker/, or when you navigate to the 'Control Page' page, open it in a new tab or window.
-- If you have a notebook instance running in Studio, it won't show up under 'Notebook instances' from the main SageMaker launch page. The former is techincally on a Studio instance (EC2 / machine).</p>
+<h3>FUN FACTS</h3>
+<ul>
+<li>
+<p>There is no easy way to get back to the Studio page from the Jupyter server. So, either keep this link handy: https://console.aws.amazon.com/sagemaker/, or when you navigate to the 'Control Page' page, open it in a new tab or window.</p>
+</li>
+<li>
+<p>If you have a notebook instance running in Studio, it won't show up under 'Notebook instances' from the main SageMaker launch page. The former is techincally on a Studio instance (EC2 / machine).</p>
+</li>
+</ul>
 <h1>Studio</h1>
 <h2>JumpStart</h2>
 <p>Once in Studio JupyterLab server, I decided to try Jumpstart. "Accelerate your machine learning workflows with one-click access to popular model collections." <strong>DEFINE JumpStart more better</strong> I figured it was worth a try. I'm a somewhat experienced Data Scientist, I've written training and tuning code by hand. But surely, if Amazon is offering to do it all for me, it must be <em>amazing</em>.</p>
@@ -214,14 +220,21 @@
 <p><img alt="Graph-of-accuracy" src="./images/2022-06-19-Sagemaker/accuracy-graph.png"></p>
 <p>We seem to be dealing with some inaccuracy in the Defective class. In my next post, I'll see if I can do better, fine-tuning the model (or a different one!) myself. Or, maybe, I'll just forge ahead with building out the pipeline. We'll see if I'm feeling more Data Science-y or Machine Learning Engineer-y...</p>
 <h1>Cleaning up</h1>
-<p><strong>HOT TIP</strong>
-- To avoid incurring unexpected charges, select 'File -&gt; Shut Down' to shut down the instance, all kernels, and images (which I haven't talked about).
-- <strong>This does not shut down any endpoints you have created</strong>. These cost you money, too! To kill them, from the main SageMaker page: 
-    - Inference (from the left-hand side menu)
-    - Endpoints
-    - Select the dot next to the endpoint you want to kill
-    - Actions
-    - Delete, Delete</p>
+<ul>
+<li>
+<p>To avoid incurring unexpected charges, select 'File -&gt; Shut Down' to shut down the instance, all kernels, and images (which I haven't talked about).</p>
+</li>
+<li>
+<p><strong>This does not shut down any endpoints you have created</strong>. These cost you money, too! To kill them, from the main SageMaker page: </p>
+<ul>
+<li>Inference (from the left-hand side menu)</li>
+<li>Endpoints</li>
+<li>Select the dot next to the endpoint you want to kill</li>
+<li>Actions</li>
+<li>Delete, Delete</li>
+</ul>
+</li>
+</ul>
     </article>
 
         <div class="tags">
