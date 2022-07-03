@@ -118,10 +118,10 @@ I down-sized the default instance from an ml.p2.xlarge ($1.125/hr) to an ml.m5.l
 
 Grabbing a random Defective and Non-Defective image, I made predictions...both were classified as Non-Defective. Hmm. I reran the code again, and two different random images were predicted correctly. Running through all images, I got:
 
-|Label|Total|Correct|Accuracy|
+|Label  |Total  |Correct  |Accuracy|
 |---|---|---|---|
-|Defective|92|66|71.7%|
-|Non-Defective|100|100|100%|
+|Defective  |92  |66|71.7%|
+|Non-Defective  |100|100|100%|
 
 ![Graph-of-accuracy]({static}/images/2022-06-19-Sagemaker/accuracy-graph.png)
 
