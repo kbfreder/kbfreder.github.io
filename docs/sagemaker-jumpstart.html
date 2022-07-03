@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+            <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+        <title>SageMaker Jumpstart</title>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="./theme/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="./theme/css/clean-blog.min.css" rel="stylesheet">
+
+        <!-- Code highlight color scheme -->
+            <link href="./theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+
+        <!-- Custom Fonts -->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+        <meta name="description" content="My experience with Sageamker Jumpstart">
+
+        <meta name="author" content="Kendra Frederick">
+
+        <meta name="tags" content="aws">
+        <meta name="tags" content="computer vision">
+
+	                <meta property="og:locale" content="">
+		<meta property="og:site_name" content="Data Science: A Scenic Date">
+
+	<meta property="og:type" content="article">
+            <meta property="article:author" content="./author/kendra-frederick.html">
+	<meta property="og:url" content="./sagemaker-jumpstart.html">
+	<meta property="og:title" content="SageMaker Jumpstart">
+	<meta property="article:published_time" content="2022-06-19 10:20:00-09:00">
+            <meta property="og:description" content="My experience with Sageamker Jumpstart">
+
+            <meta property="og:image" content="./theme/images/post-bg.jpg">
+</head>
+
+<body class="article-sagemaker-jumpstart">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="./">Data Science: A Scenic Date</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/categories.html">Categories</a></li>
+                        <li><a href="/tags.html">Tags</a></li>
+                        <li><a href="/pages/about.html#about">About Me</a></li>
+
+                            <li><a href="./pages/about.html">About Me</a></li>
+                            <li><a href="./pages/contact.html">Contact Me</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-color: blue">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>SageMaker Jumpstart</h1>
+                        <span class="meta">Posted by
+                                <a href="./author/kendra-frederick.html">Kendra Frederick</a>
+                             on Sun 19 June 2022
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <p>Somewhat easy to use, but black-box-y</p>
+<h1>SagaMaker terminology</h1>
+<p>First of all, I found the landing page for SageMaker to be a little confusing.</p>
+<p>The first thing you need to do is create a "domain". What is a domain? It's kind of like an enclave of relevant AWS services and infrastructure that supply your machine learning environment. From the AWS <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/studio-entity-status.html">Documentation</a>, a SageMaker Domain "consists of an associated Amazon Elastic File System (Amazon EFS) volume; a list of authorized users; and a variety of security, application, policy, and Amazon Virtual Private Cloud (Amazon VPC) configurations. An AWS account is limited to one Domain per Region. Users within a Domain can share notebook files and other artifacts with each other." It feels like there could be a better word for this, but as with many things AWS, we'll just have to accept the jargon they've chosen. </p>
+<p>While we're defining things, we might as well touch upon two other concepts that are foundational to the inner working of SageMaker:
+- <em>User Profile</em>: From the docs: "A user profile represents a single user within a Domain, and is the main way to reference a user for the purposes of sharing, reporting, and other user-oriented features. This entity is created when a user onboards to the Amazon SageMaker Domain."
+    - You couldn't always share Notebooks within SageMaker, so I imagine this is a way to keep track of who is creating, doing, modifying, etc what.</p>
+<ul>
+<li><em>App</em>: Again, from the docs: "An app represents an application [KF note: no kidding] that supports the reading and execution experience of the user’s notebooks, terminals, and consoles. The type of app can be JupyterServer, KernelGateway, RStudioServerPro, or RSession. A user may have multiple Apps active simultaneously."<ul>
+<li>It's the platform upon which you create and run notebooks, endpoints, etc. Again, "app" feels like an ambiguous and sub-optimal term for this, but whatevs.</li>
+</ul>
+</li>
+</ul>
+<h1>Getting Started, again</h1>
+<p>Back to <em>me</em> and <em>my</em> SageMaker experience: turns out I had already created a Domain from a tutorial a few months back (I was preparing for my AWS Machine Learning Specialty Certification exam), so clicking on 'Getting Started' and following the steps results in a warning that I couldn't create more than one domain. Cool, but how about you provide me a shortcut to said existing domain from the launch page?</p>
+<p><img alt="Domain error" src="./images/2022-06-19-Sagemaker/domain-error.png"></p>
+<p>Also, by doing this, you'll create another user profile (which shows up under 'Users', as a new 'Name' entry). Which is an unwanted consequence. (To delete this new user, click on the User name, then orange 'Edit' button in lower right, then 'Delete user', plus then some confirmations.)</p>
+<p>Don't make the AWS n00b mistake of not changing the Region you're navigating resources in (particularly important if your "local" region is not the default East-Coast-centric one of N. Virginia). 'Cause then you'll be confused why you can't find what you did yesterday. (Or so I hear...)</p>
+<h2>Coming back to an existing Domain</h2>
+<p>So, if you've already created a Domain, I think the click-path to follow from the launch page is: from the left-hand side menu, click on 'Control Panel'. Then, from the Control Panel page, under Users, next to a user, click the 'Launch App' drop down, then select 'Studio'. Launching a Studio App will redirect you to a JupyterLab server. </p>
+<p>Ignore `Control Panel / Studio' on the side menu from the main page, and the 'Apps' section on the Control Panel page, unless you want to read about them but not actually launch anything (at least not in a manner that I could ascertain.) </p>
+<p><em>Or</em> you can go to 'Notebook instances' and create one from there. But Studio seems to be the new product they are pushing, so if you're new, it's probably worth learning Studio. </p>
+<p><strong>FUN FACTS</strong>
+- There is no easy way to get back to the Studio page from the Jupyter server. So, this link will come in handy: https://console.aws.amazon.com/sagemaker/
+- If you have a notebook instance running in Studio, it won't show up under 'Notebook instances' from the main SageMaker launch page. The former is techincally on a Studio instance (EC2 / machine). (<strong>I NEED TO CONFIMRM THIS</strong>)</p>
+<h1>Studio</h1>
+<h2>JumpStart</h2>
+<p>Once in Studio JupyterLab server, I decided to try Jumpstart. "Accelerate your machine learning workflows with one-click access to popular model collections." <strong>DEFINE JumpStart more better</strong> I figured it was worth a try. I'm a somewhat experienced Data Scientist, I've written training and tuning code by hand. But surely, if Amazon is offering to do it all for me, it must be <em>amazing</em>.</p>
+<p>...</p>
+<p>But let's back up. What was I trying to do? My goal was to develop an app or tool called "Good Chip, Bad Chip", inspired by a dataset of images of defective and non-defective Lay's potato chips I found on <a href="https://www.kaggle.com/datasets/concaption/pepsico-lab-potato-quality-control">Kaggle</a>. The idea was a user could upload a picture of a potato chip to the app, and find out if it was defective or acceptable. (Yes, this is kind of a dumb idea -- pretty much on par with <a href="https://www.youtube.com/watch?v=ACmydtFDTGs">Hot Dog / not Hot Dog</a>. But it seemed like a fun enough side project to 1. train a Computer Vision (CV) model and 2. play around with AWS architecture and serivces.</p>
+<p>First, I uploaded the images to an S3 bucket. Then, I created a Jumpstart training job using the Inception V3 model. I tweaked the default hyperparameters (3 epochs? excuse me? Also, batch size is typically 32, not 4. A learning rate of 0.05 struck me as large. Especially if your batch size is small) and I pointed the training job to my S3 bucket. But I encountered an error: <code>ClientError: Data download failed:failed to download data. 403 Forbidden (403): Forbidden</code>. </p>
+<p>After some hair-pulling and Googling, I finally discovered an <a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-roles.html#sagemaker-roles-get-execution-role-s3">actually helpful documentation page</a>: (emphasis added)</p>
+<blockquote>
+<p>"The IAM managed policy, AmazonSageMakerFullAccess ... only grants ... permission to perform certain Amazon S3 actions <strong>on buckets or objects with SageMaker, Sagemaker, sagemaker, or aws-glue in the name</strong>."</p>
+</blockquote>
+<p><img alt="Y THO" src="./images/2022-06-19-Sagemaker/ytho.jpeg"></p>
+<p>The page goes on to explain how to add an additional policy to an execution role to grant it access to other Amazon S3 buckets and object. Mega-helpful, this page. So, to the "AmazonSageMaker-ExecutionPolicy-xxx" IAM policy that is attached to the SageMaker Execution Role, I added the line <code>"arn:aws:s3:::pepsico-potato-chip-dataset/*"</code> under Resources. </p>
+<h2>How-to aside</h2>
+<p>To find the policy, go to IAM &gt; Roles, then search for "SageMaker-Execution". This will list the policies associated with this Role. You want the ExcectionPolicy one. The final policy looked like this:</p>
+<div class="highlight"><pre><span></span><code>{
+    &quot;Version&quot;: &quot;2012-10-17&quot;,
+    &quot;Statement&quot;: [
+        {
+            &quot;Action&quot;: [
+                &quot;s3:ListBucket&quot;
+            ],
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Resource&quot;: [
+                &quot;arn:aws:s3:::SageMaker&quot;
+            ]
+        },
+        {
+            &quot;Action&quot;: [
+                &quot;s3:GetObject&quot;,
+                &quot;s3:PutObject&quot;,
+                &quot;s3:DeleteObject&quot;
+            ],
+            &quot;Effect&quot;: &quot;Allow&quot;,
+            &quot;Resource&quot;: [
+                &quot;arn:aws:s3:::SageMaker/*&quot;,
+                &quot;arn:aws:s3:::pepsico-potato-chip-dataset/*&quot;
+            ]
+        }
+    ]
+}
+</code></pre></div>
+
+<p>Now, launching the training job proceeded without error! If I had to do it again, however, I'd give the training job a more descriptive name -- not the default one. Or, I'd take notes. Or use MLFlow. </p>
+<h2>Evaluating the model</h2>
+<p>Typically, when we are done training a model, we'd evaluate it against our test or hold-out dataset. Or, first and more correctly, we'd examine the model's performance against a validation dataset during training. JumpStart makes no mention of (a) whether it's doing this (I have to imagine it is) or (b) what those results are. You also aren't given a choice of what objective / loss function to train your model on (though CrossEntropy is pretty generic and probably what they use), or evaluation metric(s). My dataset was balanced, but if yours isn't, I'm curious how JumpStart performs. </p>
+<p>Anyway, since this information isn't provided, I decided to evaluate the model "manually". </p>
+<p><img alt="Fine" src="./images/2022-06-19-Sagemaker/thanos-infinity-gauntlet.gif"></p>
+<p>Thankfully, the Kaggle dataset already has the images split into Train and Test. At least <em>someone's</em> thinking about model evaluation.</p>
+<p>First, we need to launch a model endpoint, which we'll use to make inferences or predictions. It's as easy as clicking the "Deploy" button that appears when your training job is complete. I down-sized the default instance to <strong>XXX</strong>, to save money. Besides, the hold-out set only consisted of ~200 images. You'll need to make a note of the Endpoint name and define it in your notebook. Speaking of which, SageMaker provides a handy template for testing out your endpoint. I modified it a bit. <strong>UPLOAD NOTEBOOK TO GITHUB?</strong></p>
+<p>Grabbing a random Defective and Non-Defective image, I made predictions...both were classified as Non-Defective. Hmm. I reran the code again, and two different random images were predicted correctly. Running through all images, I got:</p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Correctly Predicted</th>
+<th>Total</th>
+<th>Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Defective</td>
+<td>66</td>
+<td>92</td>
+<td>71.7%</td>
+</tr>
+<tr>
+<td>Non-Defective</td>
+<td>100</td>
+<td>100</td>
+<td>100%</td>
+</tr>
+</tbody>
+</table>
+<p>Hmmm, we seem to be dealing with some inaccuracy in the Defective class. In my next post, I'll see if I can do better, fine-tuning the model (or a different one!) myself. Or, maybe, I'll just forge ahead with building out the pipeline. We'll see if I'm feeling more Data Science-y or Machine Learning Engineer-y...</p>
+<h1>Cleaning up</h1>
+<p><strong>HOT TIP</strong>
+- To avoid incurring unexpected charges, select 'File -&gt; Shut Down' to shut down the instance, all kernels, and images (which I haven't talked about).
+- <strong>This does not shut down any endpoints you have created</strong>. These cost you money, too! To kill them, from the main SageMaker page: 
+    - Inference (from the left-hand side menu)
+    - Endpoints
+    - Select the dot next to the endpoint you want to kill
+    - Actions
+    - Delete, Delete</p>
+    </article>
+
+        <div class="tags">
+            <p>tags: <a href="./tag/aws.html">aws</a>, <a href="./tag/computer-vision.html">computer vision</a></p>
+        </div>
+
+    <hr>
+
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                            <li>
+                                <a href="https://github.com/kbfreder">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://linkedin.com/in/kbfreder">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                    </ul>
+<p class="copyright text-muted">
+    Blog powered by <a href="http://getpelican.com">Pelican</a>,
+    which takes great advantage of <a href="http://python.org">Python</a>. <br />        &copy;  Kendra Frederick
+</p>                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="./theme/js/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./theme/js/bootstrap.min.js"></script>
+
+        <!-- Custom Theme JavaScript -->
+        <script src="./theme/js/clean-blog.min.js"></script>
+
+</body>
+
+</html>
