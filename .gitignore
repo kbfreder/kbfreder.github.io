@@ -1,0 +1,7 @@
+# project agnositc
+__pycache__/
+.DS_Store
+.ipynb_checkpoints/
+
+# project specific
+instructions.ignore.md
