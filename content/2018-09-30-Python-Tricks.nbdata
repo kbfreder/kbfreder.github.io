@@ -1,0 +1,7 @@
+Title: Panda Tricks: Resampling
+Slug: 2018-09-30-Python-Tricks-resampling
+Date: 2018-09-30
+Category: posts
+Tags: tips & tricks, pandas, timeseries
+author: Kendra Frederick
+Summary: Resampling to align differentially-sampled time series data
